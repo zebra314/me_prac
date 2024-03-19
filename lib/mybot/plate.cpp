@@ -6,8 +6,10 @@ Wheel::Wheel() {
 
 Wheel::~Wheel() {
   // Destructor
+  detachInterrupt(digitalPinToInterrupt(this->encoder_pin_a));
 }
 
+Wheel* Wheel::wheel_instance = nullptr;
 void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, byte encoder_pin_a, byte encoder_pin_b) {
   this->dc_pin_dig_1 = dc_pin_dig_1;
   this->dc_pin_dig_2 = dc_pin_dig_2;
@@ -26,7 +28,11 @@ void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm,
   this->encoder_count = 0;
 
   wheel_instance = this;
-  attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_isr, RISING);
+  attachInterrupt(digitalPinToInterrupt(encoder_pin_a), wheel_instance->encoder_isr, RISING);
+}
+
+void Wheel::encoder_isr() {
+  wheel_instance->encoder_read();
 }
 
 void Wheel::encoder_read() {
@@ -37,11 +43,8 @@ void Wheel::encoder_read() {
   }
 }
 
-Wheel* Wheel::wheel_instance = nullptr;
-void Wheel::encoder_isr() {
-  if (wheel_instance != nullptr) {
-    wheel_instance->encoder_read();
-  }
+volatile long Wheel::get_encoder_count() {
+  return this->encoder_count;
 }
 
 void Wheel::wheel_move(int pwm) {

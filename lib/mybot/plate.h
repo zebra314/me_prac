@@ -23,19 +23,19 @@ private:
   float ki;
   float kd;
 
+  static Wheel *wheel_instance;
+  static void encoder_isr();
+
+  void encoder_read();
+
 public:
   Wheel();
   ~Wheel();
 
   void wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, byte encoder_pin_a, byte encoder_pin_b);
   void wheel_move(int pwm);
-
-  void encoder_read();
-  static void encoder_isr();
-  static Wheel* wheel_instance;
-
   float pid_control(int target);
-
+  volatile long get_encoder_count();
 };
 
 class Plate {
