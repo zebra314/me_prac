@@ -19,7 +19,7 @@ private:
   float prev_error;
   float error_integral;
 
-  float kp;
+  float kp;  
   float ki;
   float kd;
 

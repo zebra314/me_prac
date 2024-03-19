@@ -25,26 +25,25 @@ void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm,
   pinMode(this->encoder_pin_a, INPUT);
   pinMode(this->encoder_pin_b, INPUT);
 
-  this->encoder_count = 0;
-
-  wheel_instance = this;
-  attachInterrupt(digitalPinToInterrupt(encoder_pin_a), wheel_instance->encoder_isr, RISING);
+  this->wheel_instance->encoder_count = 0;
+  attachInterrupt(digitalPinToInterrupt(encoder_pin_a), this->wheel_instance->encoder_isr, RISING);
 }
 
 void Wheel::encoder_isr() {
+  Serial.println(wheel_instance->encoder_count);
   wheel_instance->encoder_read();
 }
 
 void Wheel::encoder_read() {
-  if (digitalRead(this->encoder_pin_b) > 0) {
-    this->encoder_count--;
+  if (digitalRead(this->dc_pin_dig_2) > 0) {
+    this->wheel_instance->encoder_count--;
   } else {
-    this->encoder_count++;
+    this->wheel_instance->encoder_count++;
   }
 }
 
 volatile long Wheel::get_encoder_count() {
-  return this->encoder_count;
+  return this->wheel_instance->encoder_count;
 }
 
 void Wheel::wheel_move(int pwm) {
