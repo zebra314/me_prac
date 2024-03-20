@@ -4,8 +4,7 @@
 #include <Arduino.h>
 #include <math.h>
 
-// We set the encoder intrupt in the setup function of the main file
-// #define ENABLE_ENCODER
+#define ENABLE_ENCODER
 
 class Wheel {
 private:

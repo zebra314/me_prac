@@ -38,8 +38,10 @@ void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm,
   pinMode(this->encoder_pin_a, INPUT);
   pinMode(this->encoder_pin_b, INPUT);
 
+  #ifdef ENABLE_ENCODER
   attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_read, RISING);
-
+  #endif
+  
   wheel_instance = this;
 }
 
