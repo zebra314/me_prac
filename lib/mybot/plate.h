@@ -38,7 +38,6 @@
 #define BR_kp        2.5
 #define BR_ki        0.8
 #define BR_kd        0
-#define ARM_pin_5
 
 #define BL_dig_pin_1 16
 #define BL_dig_pin_2 17
@@ -88,9 +87,19 @@ private:
   long BR_enc_count;
   long BL_enc_count;
 
+  int FR_target;
+  int FL_target;
+  int BR_target;
+  int BL_target;
+
   Arm arm;
 
+  long current_time;
+  long previous_time;
+
   void plate_get_enc_count();
+  void plate_update_time();
+  void plate_move();
 
 public:
   Plate();

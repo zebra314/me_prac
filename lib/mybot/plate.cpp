@@ -2,25 +2,17 @@
 
 Plate::Plate() {
   // Constructor
-  Wheel FR;
-  Wheel FL;
-  Wheel BR;
-  Wheel BL;
-  Arm arm;
+  FR_enc_count = 0;
+  FL_enc_count = 0;
+  BR_enc_count = 0;
+  BL_enc_count = 0;
 
-  this->FR = FR;
-  this->FL = FL;
-  this->BR = BR;
-  this->BL = BL;
-  this->arm = arm;
+  current_time = 0;
+  previous_time = 0;
 }
 
 Plate::~Plate() {
   // Destructor
-  FR.~Wheel();
-  FL.~Wheel();
-  BR.~Wheel();
-  BL.~Wheel();
 }
 
 void Plate::plate_connect() {
@@ -60,35 +52,48 @@ bool not_done = true;
 bool Plate::plate_command(Command command, int value) {
   switch (command) {
     case Command::LINEAR_POSI:
-      FR.wheel_posi_ctrl(value);
-      FL.wheel_posi_ctrl(value);
-      BR.wheel_posi_ctrl(value);
-      BL.wheel_posi_ctrl(value);
       break;
-    case Command::LINEAR_VEL:
-      FR.wheel_pwm_ctrl(value);
-      FL.wheel_pwm_ctrl(value);
-      BR.wheel_pwm_ctrl(value);
-      BL.wheel_pwm_ctrl(value);
-      break;
+    
     case Command::ANGULAR_POSI:
-      FR.wheel_posi_ctrl(value);
-      FL.wheel_posi_ctrl(-value);
-      BR.wheel_posi_ctrl(-value);
-      BL.wheel_posi_ctrl(value);
       break;
+    
+    case Command::LINEAR_VEL:
+      float velocity = value; 
+      float pulse_per_turn = PPR * GEAR_RATIO;
+      float pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
+
+      Plate::plate_update_time();
+      float delta_target = velocity * pulse_per_meter * (current_time - previous_time) / 1.0e6;
+      FR_target += delta_target;
+      FL_target += delta_target;
+      BR_target += delta_target;
+      BL_target += delta_target;
+
+      Plate::plate_move();
+      break;
+    
     case Command::ANGULAR_VEL:
-      FR.wheel_pwm_ctrl(value);
-      FL.wheel_pwm_ctrl(-value);
-      BR.wheel_pwm_ctrl(-value);
-      BL.wheel_pwm_ctrl(value);
+      float omega = value; 
+      float pulse_per_turn = PPR * GEAR_RATIO;
+      float pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
+
+      Plate::plate_update_time();
+      float delta_target = omega * pulse_per_meter * (current_time - previous_time) / 1.0e6;
+      FR_target += delta_target;
+      FL_target -= delta_target;
+      BR_target += delta_target;
+      BL_target -= delta_target;
+
+      Plate::plate_move();
       break;
+
     case Command::PAUSE:
       FR.wheel_pwm_ctrl(0);
       FL.wheel_pwm_ctrl(0);
       BR.wheel_pwm_ctrl(0);
       BL.wheel_pwm_ctrl(0);
       break;
+
     case Command::RECORD:
       FR.wheel_pwm_ctrl(0);
       FL.wheel_pwm_ctrl(0);
@@ -144,4 +149,16 @@ void Plate::plate_get_enc_count() {
   BR_enc_count = BR.get_encoder_count();
   BL_enc_count = BL.get_encoder_count();
   interrupts();
+}
+
+void Plate::plate_update_time() {
+  previous_time = current_time;
+  current_time = micros();
+}
+
+void Plate::plate_move() {
+  FR.wheel_posi_ctrl(FR_target);
+  FL.wheel_posi_ctrl(FL_target);
+  BR.wheel_posi_ctrl(BR_target);
+  BL.wheel_posi_ctrl(BL_target);
 }
