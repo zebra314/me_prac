@@ -8,6 +8,7 @@
 
 class Wheel {
 private:
+  /* PINs */
   byte dc_pin_dig_1;
   byte dc_pin_dig_2;
   byte dc_pin_pwm;
@@ -15,8 +16,7 @@ private:
   byte encoder_pin_a;
   byte encoder_pin_b;
 
-  volatile long encoder_count;
-
+  /* PID params*/
   long prev_time;
   float prev_error;
   float error_integral;
@@ -25,17 +25,23 @@ private:
   float ki;
   float kd;
 
+  /* Encoder */
+  volatile long encoder_count;
   friend void encoder_read();
 
 public:
   Wheel();
   ~Wheel();
   
-  void wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, byte encoder_pin_a, byte encoder_pin_b);
-  void wheel_move(int pwm);
+  void wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, 
+                     byte encoder_pin_a, byte encoder_pin_b,
+                     float kp, float ki, float kd);
+
+  void wheel_pwm_ctrl(int pwm);
+  void wheel_posi_ctrl(int posi);
+  void wheel_rest_enc();
   float pid_control(int target);
-  
-  volatile long get_encoder_count();
+  long get_encoder_count();
 };
 
 #endif // !WHEEL_H

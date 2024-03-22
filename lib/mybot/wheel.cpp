@@ -19,7 +19,9 @@ void encoder_read() {
   }
 }
 
-void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, byte encoder_pin_a, byte encoder_pin_b) {
+void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, 
+                          byte encoder_pin_a, byte encoder_pin_b,
+                          float kp, float ki, float kd) {
   this->dc_pin_dig_1 = dc_pin_dig_1;
   this->dc_pin_dig_2 = dc_pin_dig_2;
   this->dc_pin_pwm = dc_pin_pwm;
@@ -27,9 +29,9 @@ void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm,
   this->encoder_pin_a = encoder_pin_a;
   this->encoder_pin_b = encoder_pin_b;
 
-  this->kp = 2.5;
-  this->kd = 0.8;
-  this->ki = 0;
+  this->kp = kp;
+  this->kd = kd;
+  this->ki = ki;
 
   pinMode(this->dc_pin_dig_1, OUTPUT);
   pinMode(this->dc_pin_dig_2, OUTPUT);
@@ -45,11 +47,7 @@ void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm,
   wheel_instance = this;
 }
 
-volatile long Wheel::get_encoder_count() {
-  return wheel_instance->encoder_count;
-}
-
-void Wheel::wheel_move(int pwm) {
+void Wheel::wheel_pwm_ctrl(int pwm) {
   if (pwm > 0) {
     digitalWrite(this->dc_pin_dig_1, HIGH);
     digitalWrite(this->dc_pin_dig_2, LOW);
@@ -61,6 +59,11 @@ void Wheel::wheel_move(int pwm) {
     digitalWrite(this->dc_pin_dig_2, LOW);
   }
   analogWrite(this->dc_pin_pwm, abs(pwm));
+}
+
+void Wheel::wheel_posi_ctrl(int posi) {
+  int pwm = pid_control(posi);
+  wheel_pwm_ctrl(pwm);
 }
 
 float Wheel::pid_control(int target) {
@@ -77,4 +80,12 @@ float Wheel::pid_control(int target) {
   this->prev_error = error;
 
   return output;
+}
+
+long Wheel::get_encoder_count() {
+  return wheel_instance->encoder_count;
+}
+
+void Wheel::wheel_rest_enc() {
+  wheel_instance->encoder_count = 0;
 }
