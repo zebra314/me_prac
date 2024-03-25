@@ -117,6 +117,7 @@ bool Plate::plate_command(Command command, int value) {
 // }
 
 int Plate::plate_check_enc(WheelType wheel_type) {
+  plate_update_enc_count();
   switch (wheel_type) {
     case WheelType::FR:
       return FR_enc_count;
@@ -142,7 +143,7 @@ void Plate::plate_rest_enc() {
   interrupts();
 }
 
-void Plate::plate_get_enc_count() {
+void Plate::plate_update_enc_count() {
   noInterrupts();
   FR_enc_count = FR.get_encoder_count();
   FL_enc_count = FL.get_encoder_count();

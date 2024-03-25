@@ -97,7 +97,7 @@ private:
   long current_time;
   long previous_time;
 
-  void plate_get_enc_count();
+  void plate_update_enc_count();
   void plate_update_time();
   void plate_move();
 
