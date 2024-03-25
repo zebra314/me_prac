@@ -17,36 +17,36 @@
 #define FR_pwm_pin   6
 #define FR_enc_pin_a 2
 #define FR_enc_pin_b 7
-#define FR_kp        2.5
-#define FR_ki        0.8
-#define FR_kd        0
+#define FR_kp        2.7
+#define FR_ki        0.04
+#define FR_kd        0.8
 
 #define FL_dig_pin_1 8
 #define FL_dig_pin_2 9
 #define FL_pwm_pin   10
 #define FL_enc_pin_a 3
 #define FL_enc_pin_b 11
-#define FL_kp        2.5
-#define FL_ki        0.8
-#define FL_kd        0
+#define FL_kp        2.7
+#define FL_ki        0.04
+#define FL_kd        0.8
 
 #define BR_dig_pin_1 12
 #define BR_dig_pin_2 13
 #define BR_pwm_pin   14
 #define BR_enc_pin_a 18
 #define BR_enc_pin_b 15
-#define BR_kp        2.5
-#define BR_ki        0.8
-#define BR_kd        0
+#define BR_kp        2.7
+#define BR_ki        0.04
+#define BR_kd        0.8
 
 #define BL_dig_pin_1 16
 #define BL_dig_pin_2 17
 #define BL_pwm_pin   20
 #define BL_enc_pin_a 19
 #define BL_enc_pin_b 21
-#define BL_kp        2.5
-#define BL_ki        0.8
-#define BL_kd        0
+#define BL_kp        2.7
+#define BL_ki        0.04
+#define BL_kd        0.8
 
 #define ARM_pin_0    22
 #define ARM_pin_1    23
