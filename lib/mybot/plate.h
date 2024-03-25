@@ -39,8 +39,8 @@
 #define BR_ki        0.04
 #define BR_kd        0.8
 
-#define BL_dig_pin_1 16
-#define BL_dig_pin_2 17
+#define BL_dig_pin_1 36
+#define BL_dig_pin_2 38
 #define BL_pwm_pin   20
 #define BL_enc_pin_a 19
 #define BL_enc_pin_b 21
