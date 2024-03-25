@@ -5,33 +5,43 @@
 #include "arm.h"
 #include "plate.h"
 
-// #define ENABLE_PLOTTER
+#define ENABLE_PLOTTER
 
 Plate plate;
 
 /* PLOT */
 #ifdef ENABLE_PLOTTER
 Plotter plotter;
-double plot_x;
+double FL_motor_posi, BL_motor_posi;
 #endif
 
 void setup() {
+  #ifndef ENABLE_PLOTTER 
   Serial.begin(9600);
+  #endif
+
   plate.plate_connect();
   
   #ifdef ENABLE_PLOTTER
   plotter.Begin();
-  plotter.AddTimeGraph("Motor position", 5000, "time", plot_x);
+  plotter.AddTimeGraph("Motor position", 5000, "FL", FL_motor_posi, "BL", BL_motor_posi);
   #endif
 }
 
 void loop() {
-  plate.plate_command(Command::LINEAR_POSI, -2000);
+  plate.plate_command(Command::LINEAR_VEL, 0.4);
+  // plate.plate_command(Command::LINEAR_VEL, 0.7);
   
-  // Serial.println(plate.plate_check_enc(WheelType::FR));
+  #ifndef ENABLE_PLOTTER
+  // Serial.print("FL: ");
+  Serial.println(plate.plate_check_enc(WheelType::FL));
+  // Serial.print(" BL: ");
+  // Serial.println(plate.plate_check_enc(WheelType::BL));
+  #endif
 
   #ifdef ENABLE_PLOTTER
-  plot_x = plate.plate_check_enc(WheelType::FR) * -1;
+  FL_motor_posi = plate.plate_check_enc(WheelType::FL) * -1;
+  BL_motor_posi = plate.plate_check_enc(WheelType::BL) * -1;
   plotter.Plot();
   #endif
 }
