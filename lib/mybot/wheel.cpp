@@ -9,15 +9,21 @@ Wheel::~Wheel() {
   detachInterrupt(digitalPinToInterrupt(this->encoder_pin_a));
 }
 
-Wheel* wheel_instance = nullptr;
+Wheel* wheel_instance[6] = {nullptr};
 
-void encoder_read() {
-  if (digitalRead(wheel_instance->encoder_pin_b) == LOW) {
-    wheel_instance->encoder_count--;
-  } else {
-    wheel_instance->encoder_count++;
-  }
+void encoder_isr_0() {
+  wheel_instance[0]->encoder_read();
 }
+void encoder_isr_1() {
+  wheel_instance[1]->encoder_read();
+}
+void encoder_isr_4() {
+  wheel_instance[4]->encoder_read();
+}
+void encoder_isr_5() {
+  wheel_instance[5]->encoder_read();
+}
+
 
 void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, 
                           byte encoder_pin_a, byte encoder_pin_b,
@@ -40,11 +46,34 @@ void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm,
   pinMode(this->encoder_pin_a, INPUT);
   pinMode(this->encoder_pin_b, INPUT);
 
+  Serial.println(digitalPinToInterrupt(encoder_pin_a));
+
   #ifdef ENABLE_ENCODER
-  attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_read, RISING);
+  switch (digitalPinToInterrupt(encoder_pin_a)) {
+    case 0:
+      attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_isr_0, RISING);
+      break;
+    case 1:
+      attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_isr_1, RISING);
+      break;
+    case 4:
+      attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_isr_4, RISING);
+      break;
+    case 5:
+      attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_isr_5, RISING);
+      break;
+  }
   #endif
   
-  wheel_instance = this;
+  wheel_instance[digitalPinToInterrupt(encoder_pin_a)] = this;
+}
+
+void Wheel::encoder_read() {
+  if (digitalRead(this->encoder_pin_b) == LOW) {
+    this->encoder_count--;
+  } else {
+    this->encoder_count++;
+  }
 }
 
 void Wheel::wheel_pwm_ctrl(int pwm) {
@@ -70,7 +99,7 @@ float Wheel::pid_control(int target) {
   long current_time = micros();
   float dt = (current_time - this->prev_time) / 1.0e6;
 
-  int error = wheel_instance->encoder_count - target;
+  int error = wheel_instance[digitalPinToInterrupt(this->encoder_pin_a)]->encoder_count - target;
   float error_derivative = (error - this->prev_error) / dt;
   this->error_integral += error * dt;
 
@@ -83,9 +112,9 @@ float Wheel::pid_control(int target) {
 }
 
 long Wheel::get_encoder_count() {
-  return wheel_instance->encoder_count;
+  return wheel_instance[digitalPinToInterrupt(this->encoder_pin_a)]->encoder_count;
 }
 
 void Wheel::wheel_rest_enc() {
-  wheel_instance->encoder_count = 0;
+  wheel_instance[digitalPinToInterrupt(this->encoder_pin_a)]->encoder_count = 0;
 }

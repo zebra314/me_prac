@@ -13,9 +13,6 @@ private:
   byte dc_pin_dig_2;
   byte dc_pin_pwm;
 
-  byte encoder_pin_a;
-  byte encoder_pin_b;
-
   /* PID params*/
   long prev_time;
   float prev_error;
@@ -24,10 +21,6 @@ private:
   float kp;
   float ki;
   float kd;
-
-  /* Encoder */
-  volatile long encoder_count;
-  friend void encoder_read();
 
 public:
   Wheel();
@@ -42,6 +35,12 @@ public:
   void wheel_rest_enc();
   float pid_control(int target);
   long get_encoder_count();
+
+  /* Encoder */
+  byte encoder_pin_a;
+  byte encoder_pin_b;
+  volatile long encoder_count;
+  void encoder_read();
 };
 
 #endif // !WHEEL_H
