@@ -49,22 +49,33 @@ void Plate::plate_get_serial_input() {
 
 bool done = false;
 bool not_done = true;
-bool Plate::plate_command(Command command, int value) {
+bool Plate::plate_command(Command command, float value) {
+  float velocity, omega;
   float pulse_per_turn, pulse_per_meter, delta_target;
   switch (command) {
     case Command::LINEAR_POSI:
+      //TODO: Implement linear position control and sync with all wheels
+      FL.wheel_posi_ctrl(value);
+      BL.wheel_posi_ctrl(value);
+      FR.wheel_posi_ctrl(value);
+      BR.wheel_posi_ctrl(value);
       break;
     
     case Command::ANGULAR_POSI:
+      //TODO: Implement linear position control and sync with all wheels
+      FR.wheel_posi_ctrl(value);
+      FL.wheel_posi_ctrl(-value);
+      BR.wheel_posi_ctrl(value);
+      BL.wheel_posi_ctrl(-value);
       break;
     
     case Command::LINEAR_VEL:
-      float velocity = value; 
-      float pulse_per_turn = PPR * GEAR_RATIO;
-      float pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
+      velocity = value; 
+      pulse_per_turn = PPR * GEAR_RATIO;
+      pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
 
       Plate::plate_update_time();
-      float delta_target = velocity * pulse_per_meter * (current_time - previous_time) / 1.0e6;
+      delta_target = velocity * pulse_per_meter * (current_time - previous_time) / 1.0e6;
       FR_target += delta_target;
       FL_target += delta_target;
       BR_target += delta_target;
@@ -72,9 +83,9 @@ bool Plate::plate_command(Command command, int value) {
 
       Plate::plate_move();
       break;
-    
+
     case Command::ANGULAR_VEL:
-      float omega = value; 
+      omega = value; 
       pulse_per_turn = PPR * GEAR_RATIO;
       pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
 

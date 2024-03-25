@@ -117,7 +117,7 @@ public:
 
   /* BASIC */
   void plate_connect();
-  bool plate_command(Command command, int value);
+  bool plate_command(Command command, float value);
   int plate_check_enc(WheelType wheel_type);
   void plate_rest_enc();
   void plate_get_serial_input();
