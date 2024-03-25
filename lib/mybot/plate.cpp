@@ -50,6 +50,7 @@ void Plate::plate_get_serial_input() {
 bool done = false;
 bool not_done = true;
 bool Plate::plate_command(Command command, int value) {
+  float pulse_per_turn, pulse_per_meter, delta_target;
   switch (command) {
     case Command::LINEAR_POSI:
       break;
@@ -74,11 +75,11 @@ bool Plate::plate_command(Command command, int value) {
     
     case Command::ANGULAR_VEL:
       float omega = value; 
-      float pulse_per_turn = PPR * GEAR_RATIO;
-      float pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
+      pulse_per_turn = PPR * GEAR_RATIO;
+      pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
 
       Plate::plate_update_time();
-      float delta_target = omega * pulse_per_meter * (current_time - previous_time) / 1.0e6;
+      delta_target = omega * pulse_per_meter * (current_time - previous_time) / 1.0e6;
       FR_target += delta_target;
       FL_target -= delta_target;
       BR_target += delta_target;
