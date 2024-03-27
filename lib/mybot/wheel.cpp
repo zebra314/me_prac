@@ -10,20 +10,10 @@ Wheel::~Wheel() {
 }
 
 Wheel* wheel_instance[6] = {nullptr};
-
-void encoder_isr_0() {
-  wheel_instance[0]->encoder_read();
+template <int interrupt_num>
+void encoder_isr() {
+  wheel_instance[interrupt_num]->encoder_read();
 }
-void encoder_isr_1() {
-  wheel_instance[1]->encoder_read();
-}
-void encoder_isr_4() {
-  wheel_instance[4]->encoder_read();
-}
-void encoder_isr_5() {
-  wheel_instance[5]->encoder_read();
-}
-
 
 void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, 
                           byte encoder_pin_a, byte encoder_pin_b,
@@ -46,21 +36,22 @@ void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm,
   pinMode(this->encoder_pin_a, INPUT);
   pinMode(this->encoder_pin_b, INPUT);
 
-  Serial.println(digitalPinToInterrupt(encoder_pin_a));
-
+  // The encoder_isr function is a template function, whcih takes the a constant integer as a template argument.
   #ifdef ENABLE_ENCODER
-  switch (digitalPinToInterrupt(encoder_pin_a)) {
+  switch (interrupt_num) {
     case 0:
-      attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_isr_0, RISING);
+      attachInterrupt(interrupt_num, encoder_isr<0>, RISING);
       break;
     case 1:
-      attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_isr_1, RISING);
+      attachInterrupt(interrupt_num, encoder_isr<1>, RISING);
       break;
     case 4:
-      attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_isr_4, RISING);
+      attachInterrupt(interrupt_num, encoder_isr<4>, RISING);
       break;
     case 5:
-      attachInterrupt(digitalPinToInterrupt(encoder_pin_a), encoder_isr_5, RISING);
+      attachInterrupt(interrupt_num, encoder_isr<5>, RISING);
+      break;
+    default:
       break;
   }
   #endif
