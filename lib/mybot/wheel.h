@@ -13,6 +13,10 @@ private:
   byte dc_pin_dig_2;
   byte dc_pin_pwm;
 
+  /* Encoder */
+  volatile long encoder_count;
+  int interrupt_num;
+
   /* PID params*/
   long prev_time;
   float prev_error;
@@ -36,11 +40,11 @@ public:
   float pid_control(int target);
   long get_encoder_count();
 
-  /* Encoder */
+  /* Encoder items called by static function */
   byte encoder_pin_a;
   byte encoder_pin_b;
-  volatile long encoder_count;
   void encoder_read();
+
 };
 
 #endif // !WHEEL_H
