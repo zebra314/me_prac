@@ -79,6 +79,12 @@ void Wheel::wheel_pwm_ctrl(int pwm) {
     digitalWrite(this->dc_pin_dig_1, LOW);
     digitalWrite(this->dc_pin_dig_2, LOW);
   }
+
+  if(pwm > 255) {
+    pwm = 255;
+  } else if(pwm < -255) {
+    pwm = -255;
+  }
   analogWrite(this->dc_pin_pwm, abs(pwm));
 }
 
