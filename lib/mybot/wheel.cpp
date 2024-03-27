@@ -10,6 +10,7 @@ Wheel::~Wheel() {
 }
 
 Wheel* wheel_instance[6] = {nullptr};
+
 template <int interrupt_num>
 void encoder_isr() {
   wheel_instance[interrupt_num]->encoder_read();

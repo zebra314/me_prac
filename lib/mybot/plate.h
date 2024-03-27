@@ -81,6 +81,7 @@ private:
   Wheel FL;
   Wheel BR;
   Wheel BL;
+  Arm arm;
 
   long FR_enc_count;
   long FL_enc_count;
@@ -91,8 +92,6 @@ private:
   int FL_target;
   int BR_target;
   int BL_target;
-
-  Arm arm;
 
   long current_time;
   long previous_time;
@@ -118,7 +117,7 @@ public:
   /* BASIC */
   void plate_connect();
   bool plate_command(Command command, float value);
-  int plate_check_enc(WheelType wheel_type);
+  int  plate_check_enc(WheelType wheel_type);
   void plate_rest_enc();
   void plate_get_serial_input();
 };
