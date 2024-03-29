@@ -6,6 +6,14 @@
 #define BlueTooth_RX_pin 10
 #define BlueTooth_BaudRate 9600
 
+enum BT_Command{
+  FORWARD,
+  BACKWARD,
+  CLOCKWISE,
+  COUNTER_CLOCKWISE,
+  STOP
+};
+
 SoftwareSerial BT(BlueTooth_RX_pin, BlueTooth_TX_pin);
 
 void BlueTooth_setup() {
