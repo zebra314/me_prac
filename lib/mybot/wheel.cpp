@@ -2,6 +2,20 @@
 
 Wheel::Wheel() {
   // Constructor
+
+  // Encoder
+  encoder_count = 0;
+  interrupt_num = 0;
+
+  // RPMs
+  rpm_time_flag = micros();
+  encoder_count_flag = 0;
+  rpms = 0;
+
+  // PID params
+  prev_time_pid = 0;
+  prev_error = 0;
+  error_integral = 0;
 }
 
 Wheel::~Wheel() {
@@ -39,6 +53,7 @@ void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm,
   pinMode(this->encoder_pin_b, INPUT);
 
   // The encoder_isr function is a template function, whcih takes the a constant integer as a template argument.
+  Serial.println(this->interrupt_num);
   #ifdef ENABLE_ENCODER
   switch (interrupt_num) {
     case 0:
@@ -66,6 +81,14 @@ void Wheel::encoder_read() {
   } else {
     this->encoder_count++;
   }
+  
+  long current_time = micros();
+  long dt = current_time - this->rpm_time_flag;
+  if (dt > 100000) {
+    this->encoder_count_flag = encoder_count;
+    this->rpm_time_flag = current_time;
+  }
+
 }
 
 void Wheel::wheel_pwm_ctrl(int pwm) {
@@ -95,7 +118,7 @@ void Wheel::wheel_posi_ctrl(int posi) {
 
 float Wheel::pid_control(int target) {
   long current_time = micros();
-  float dt = (current_time - this->prev_time) / 1.0e6;
+  float dt = (current_time - this->prev_time_pid) / 1.0e6;
 
   int error = wheel_instance[this->interrupt_num]->encoder_count - target;
   float error_derivative = (error - this->prev_error) / dt;
@@ -103,7 +126,7 @@ float Wheel::pid_control(int target) {
 
   float output = this->kp * error + this->ki * this->error_integral + this->kd * error_derivative;
 
-  this->prev_time = current_time;
+  this->prev_time_pid = current_time;
   this->prev_error = error;
 
   return output;
@@ -111,6 +134,16 @@ float Wheel::pid_control(int target) {
 
 long Wheel::get_encoder_count() {
   return wheel_instance[this->interrupt_num]->encoder_count;
+}
+
+long Wheel::get_motor_rpms() {
+  long current_time = micros();
+  if ((current_time - this->rpm_time_flag) > 700000) {
+    this->rpms = 0;
+  } else {
+    this->rpms = (encoder_count - this->encoder_count_flag) * 60.0 / (PPR * GEAR_RATIO) / ((current_time - this->rpm_time_flag) / 1.0e6);
+  }
+  return wheel_instance[this->interrupt_num]->rpms;
 }
 
 void Wheel::wheel_rest_enc() {

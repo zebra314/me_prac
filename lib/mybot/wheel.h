@@ -6,6 +6,9 @@
 
 #define ENABLE_ENCODER
 
+#define PPR 11
+#define GEAR_RATIO 50
+
 class Wheel {
 private:
   /* PINs */
@@ -17,8 +20,13 @@ private:
   volatile long encoder_count;
   int interrupt_num;
 
+  /* RPMs */
+  volatile long rpm_time_flag;
+  volatile long encoder_count_flag;
+  volatile long rpms;
+
   /* PID params*/
-  long prev_time;
+  long prev_time_pid;
   float prev_error;
   float error_integral;
 
@@ -39,12 +47,12 @@ public:
   void wheel_rest_enc();
   float pid_control(int target);
   long get_encoder_count();
+  long get_motor_rpms();
 
   /* Encoder items called by static function */
   byte encoder_pin_a;
   byte encoder_pin_b;
   void encoder_read();
-
 };
 
 #endif // !WHEEL_H
