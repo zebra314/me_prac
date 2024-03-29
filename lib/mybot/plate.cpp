@@ -74,26 +74,19 @@ bool not_done = true;
 bool Plate::plate_command(Command command, float value) {
   plate_update_state();
 
-  if(command == Command::DEBUG && debug == DEBUG::TEXT) {
-    plate_print_info();
-    return done;
-  } else if(command == Command::DEBUG && debug == DEBUG::PLOT) {
-    plotter.Plot();
-    return done;
-  } else if(command == Command::PAUSE || command == Command::RECORD) {
-      FR.wheel_pwm_ctrl(0);
-      FL.wheel_pwm_ctrl(0);
-      BR.wheel_pwm_ctrl(0);
-      BL.wheel_pwm_ctrl(0);
-    return done;
-  }
-
   float velocity, omega;
   float delta_target;
   float pulse_per_turn = PPR * GEAR_RATIO;
   float pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
 
   switch (command) {
+    case Command::DEBUG:
+      if(debug == DEBUG::TEXT) {
+        plate_print_info();
+      } else if(debug == DEBUG::PLOT) {
+        plotter.Plot();
+      }
+      break;
     case Command::LINEAR_POSI:
       velocity = 0.4;
       delta_target = velocity * pulse_per_meter * (current_time - previous_time) / 1.0e6;
@@ -136,19 +129,19 @@ bool Plate::plate_command(Command command, float value) {
       Plate::plate_move();
       break;
 
-    // case Command::PAUSE:
-    //   FR.wheel_pwm_ctrl(0);
-    //   FL.wheel_pwm_ctrl(0);
-    //   BR.wheel_pwm_ctrl(0);
-    //   BL.wheel_pwm_ctrl(0);
-    //   break;
+    case Command::PAUSE:
+      FR.wheel_pwm_ctrl(0);
+      FL.wheel_pwm_ctrl(0);
+      BR.wheel_pwm_ctrl(0);
+      BL.wheel_pwm_ctrl(0);
+      break;
 
-    // case Command::RECORD:
-    //   FR.wheel_pwm_ctrl(0);
-    //   FL.wheel_pwm_ctrl(0);
-    //   BR.wheel_pwm_ctrl(0);
-    //   BL.wheel_pwm_ctrl(0);
-    //   break;
+    case Command::RECORD:
+      FR.wheel_pwm_ctrl(0);
+      FL.wheel_pwm_ctrl(0);
+      BR.wheel_pwm_ctrl(0);
+      BL.wheel_pwm_ctrl(0);
+      break;
   }
   return done;
 }
