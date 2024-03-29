@@ -3,10 +3,13 @@
 
 #include "wheel.h"
 #include "arm.h"
+#include <Plotter.h>
+
+#define ENABLE_PLOTTER
 
 /* PINs */
+
 /*
-  !NOTE!
   Arduino pins that usable for intrrupts:
   Uno, Nano, Mini, other 328-based: 2, 3
   Mega, Mega2560, MegaADK: 2, 3, 18, 19, 20, 21
@@ -66,6 +69,13 @@ enum class Command:char {
   ANGULAR_VEL,
   PAUSE,
   RECORD,
+  DEBUG,
+};
+
+enum class DEBUG:char {
+  PLOT,
+  TEXT,
+  NONE,
 };
 
 enum class WheelType:char {
@@ -88,6 +98,11 @@ private:
   long BR_enc_count;
   long BL_enc_count;
 
+  long FR_rpms;
+  long FL_rpms;
+  long BR_rpms;
+  long BL_rpms;
+
   int FR_target;
   int FL_target;
   int BR_target;
@@ -95,16 +110,20 @@ private:
 
   long current_time;
   long previous_time;
+  long print_time_flag;
 
-  void plate_update_enc_count();
-  void plate_update_time();
+  Plotter plotter;
+
+  DEBUG debug;
+
+  void plate_check_info();
+  void plate_update_state();
   void plate_move();
 
 public:
-  Plate();
+  Plate(DEBUG debug);
   ~Plate();
 
-  /* Serial */
   int serial_input;
   int serial_buffer;
 
@@ -117,7 +136,6 @@ public:
   /* BASIC */
   void plate_connect();
   bool plate_command(Command command, float value);
-  int  plate_check_enc(WheelType wheel_type);
   void plate_rest_enc();
   void plate_get_serial_input();
 };
