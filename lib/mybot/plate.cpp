@@ -29,16 +29,16 @@ Plate::~Plate() {
 }
 
 void Plate::plate_connect() {
-  // FR.wheel_connect(FR_dig_pin_1, FR_dig_pin_2, FR_pwm_pin, FR_enc_pin_a, FR_enc_pin_b, FR_kp, FR_ki, FR_kd);
-  FL.wheel_connect(FL_dig_pin_1, FL_dig_pin_2, FL_pwm_pin, FL_enc_pin_a, FL_enc_pin_b, FL_kp, FL_ki, FL_kd);
-  // BR.wheel_connect(BR_dig_pin_1, BR_dig_pin_2, BR_pwm_pin, BR_enc_pin_a, BR_enc_pin_b, BR_kp, BR_ki, BR_kd);
+  FR.wheel_connect(FR_dig_pin_1, FR_dig_pin_2, FR_pwm_pin, FR_enc_pin_a, FR_enc_pin_b, FR_kp, FR_ki, FR_kd);
+  // FL.wheel_connect(FL_dig_pin_1, FL_dig_pin_2, FL_pwm_pin, FL_enc_pin_a, FL_enc_pin_b, FL_kp, FL_ki, FL_kd);
+  BR.wheel_connect(BR_dig_pin_1, BR_dig_pin_2, BR_pwm_pin, BR_enc_pin_a, BR_enc_pin_b, BR_kp, BR_ki, BR_kd);
   // BL.wheel_connect(BL_dig_pin_1, BL_dig_pin_2, BL_pwm_pin, BL_enc_pin_a, BL_enc_pin_b, BL_kp, BL_ki, BL_kd);
   // arm.arm_connect(ARM_pin_0, ARM_pin_1, ARM_pin_2, ARM_pin_3, ARM_pin_4, ARM_pin_gripper);
 
   if(debug == DEBUG::PLOT) {
     plotter.Begin();
-    plotter.AddTimeGraph("Motor position", 5000, "FL", FL_enc_count);
-    plotter.AddTimeGraph("Motor RPMs", 5000, "FL", FL_rpms);
+    plotter.AddTimeGraph("Motor position", 5000, "FR", FR_enc_count, "BR", BR_enc_count);
+    plotter.AddTimeGraph("Motor RPMs", 5000, "FR", FR_rpms, "BR", BR_rpms);
   } else if(debug == DEBUG::TEXT) {
     Serial.begin(9600);
   }
@@ -87,21 +87,42 @@ bool Plate::plate_command(Command command, float value) {
         plotter.Plot();
       }
       break;
+    
+    case Command::LINEAR_PWM:
+      FR.wheel_pwm_ctrl(value);
+      FL.wheel_pwm_ctrl(value);
+      BR.wheel_pwm_ctrl(value);
+      BL.wheel_pwm_ctrl(value);
+      break;
+    
+    case Command::ANGULAR_PWM:
+      FR.wheel_pwm_ctrl(value);
+      FL.wheel_pwm_ctrl(-value);
+      BR.wheel_pwm_ctrl(value);
+      BL.wheel_pwm_ctrl(-value);
+      break;
 
     case Command::LINEAR_POSI:
-      total_target = value; // meters
-      velocity = 0.4;
-      delta_target = velocity * pulse_per_meter * (current_time - previous_time) / 1.0e6;
+      // total_target = value; // meters
+      // velocity = 0.4;
+      // delta_target = velocity * pulse_per_meter * (current_time - previous_time) / 1.0e6;
 
-      while(total_target > 0){
-        FR_target += delta_target;
-        FL_target += delta_target;
-        BR_target += delta_target;
-        BL_target += delta_target;
-        total_target -= velocity;
-        Plate::plate_move();
-        delay(5);
-      }
+      // while(total_target > 0){
+      //   FR_target += delta_target;
+      //   FL_target += delta_target;
+      //   BR_target += delta_target;
+      //   BL_target += delta_target;
+      //   total_target -= velocity;
+      //   Plate::plate_move();
+      //   delay(5);
+      // }
+
+      FR_target = value;
+      FL_target = value;
+      BR_target = value;
+      BL_target = value;
+      Plate::plate_move();
+
       break;
     
     case Command::ANGULAR_POSI:
@@ -130,6 +151,7 @@ bool Plate::plate_command(Command command, float value) {
       BL_target += delta_target;
 
       Plate::plate_move();
+      delay(5);
       break;
 
     case Command::ANGULAR_VEL:
@@ -232,12 +254,12 @@ void Plate::plate_update_state() {
   noInterrupts();
   FR_enc_count = FR.get_encoder_count();
   FL_enc_count = FL.get_encoder_count();
-  BR_enc_count = BR.get_encoder_count();
+  BR_enc_count = -1 * BR.get_encoder_count();
   BL_enc_count = BL.get_encoder_count();
   
   FR_rpms = FR.get_motor_rpms();
   FL_rpms = FL.get_motor_rpms();
-  BR_rpms = BR.get_motor_rpms();
+  BR_rpms = -1 * BR.get_motor_rpms();
   BL_rpms = BL.get_motor_rpms();
   interrupts();
   
@@ -247,7 +269,7 @@ void Plate::plate_update_state() {
 
 void Plate::plate_move() {
   FR.wheel_posi_ctrl(FR_target);
-  FL.wheel_posi_ctrl(FL_target);
+  // FL.wheel_posi_ctrl(FL_target);
   BR.wheel_posi_ctrl(BR_target);
-  BL.wheel_posi_ctrl(BL_target);
+  // BL.wheel_posi_ctrl(BL_target);
 }

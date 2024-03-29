@@ -1,9 +1,7 @@
-// #include "blueTooth.h"
-
 #include <SoftwareSerial.h> 
 
-#define BlueTooth_TX_pin 11
-#define BlueTooth_RX_pin 10
+#define BlueTooth_TX_pin 12
+#define BlueTooth_RX_pin 13
 #define BlueTooth_BaudRate 9600
 
 enum BT_Command{
