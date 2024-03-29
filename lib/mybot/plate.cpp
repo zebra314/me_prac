@@ -72,13 +72,14 @@ void Plate::plate_get_serial_input() {
 bool done = false;
 bool not_done = true;
 bool Plate::plate_command(Command command, float value) {
-  plate_update_state();
 
+  // Control variables
   float velocity, omega;
   float delta_target;
   float pulse_per_turn = PPR * GEAR_RATIO;
   float pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
 
+  plate_update_state();
   switch (command) {
     case Command::DEBUG:
       if(debug == DEBUG::TEXT) {
@@ -87,6 +88,7 @@ bool Plate::plate_command(Command command, float value) {
         plotter.Plot();
       }
       break;
+
     case Command::LINEAR_POSI:
       velocity = 0.4;
       delta_target = velocity * pulse_per_meter * (current_time - previous_time) / 1.0e6;
