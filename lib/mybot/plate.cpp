@@ -70,13 +70,13 @@ void Plate::plate_get_serial_input() {
 
 bool done = false;
 bool not_done = true;
-bool Plate::plate_command(Command command, float value) {
+bool Plate::plate_command(Command command, long value) {
 
   // Control variables
-  float velocity, omega;
-  float delta_target, total_target;
-  float pulse_per_turn = PPR * GEAR_RATIO;
-  float pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
+  long velocity, omega;
+  long delta_target, total_target;
+  long pulse_per_turn = PPR * GEAR_RATIO;
+  long pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
 
   plate_update_state();
   switch (command) {
@@ -89,17 +89,17 @@ bool Plate::plate_command(Command command, float value) {
       break;
     
     case Command::LINEAR_PWM:
-      FR.wheel_pwm_ctrl(value);
-      FL.wheel_pwm_ctrl(value);
-      BR.wheel_pwm_ctrl(value);
-      BL.wheel_pwm_ctrl(value);
+      FR.wheel_pwm_ctrl((int) value);
+      FL.wheel_pwm_ctrl((int) value);
+      BR.wheel_pwm_ctrl((int) value);
+      BL.wheel_pwm_ctrl((int) value);
       break;
     
     case Command::ANGULAR_PWM:
-      FR.wheel_pwm_ctrl(value);
-      FL.wheel_pwm_ctrl(-value);
-      BR.wheel_pwm_ctrl(value);
-      BL.wheel_pwm_ctrl(-value);
+      FR.wheel_pwm_ctrl((int) value);
+      FL.wheel_pwm_ctrl((int) -value);
+      BR.wheel_pwm_ctrl((int) value);
+      BL.wheel_pwm_ctrl((int) -value);
       break;
 
     case Command::LINEAR_POSI:
@@ -117,12 +117,11 @@ bool Plate::plate_command(Command command, float value) {
       //   delay(5);
       // }
 
-      FR_target = value;
-      FL_target = value;
+      // FR_target = value;
+      // FL_target = value;
       BR_target = value;
-      BL_target = value;
+      // BL_target = value;
       Plate::plate_move();
-
       break;
     
     case Command::ANGULAR_POSI:
@@ -268,7 +267,7 @@ void Plate::plate_update_state() {
 }
 
 void Plate::plate_move() {
-  FR.wheel_posi_ctrl(FR_target);
+  // FR.wheel_posi_ctrl(FR_target);
   // FL.wheel_posi_ctrl(FL_target);
   BR.wheel_posi_ctrl(BR_target);
   // BL.wheel_posi_ctrl(BL_target);

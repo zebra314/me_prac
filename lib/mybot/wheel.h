@@ -27,12 +27,12 @@ private:
 
   /* PID params*/
   long prev_time_pid;
-  float prev_error;
-  float error_integral;
+  long prev_error;
+  long error_integral;
 
-  float kp;
-  float ki;
-  float kd;
+  long kp;
+  long ki;
+  long kd;
 
 public:
   Wheel();
@@ -40,12 +40,12 @@ public:
   
   void wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, 
                      byte encoder_pin_a, byte encoder_pin_b,
-                     float kp, float ki, float kd);
+                     long kp, long ki, long kd);
 
   void wheel_pwm_ctrl(int pwm);
-  void wheel_posi_ctrl(int posi);
+  void wheel_posi_ctrl(long posi);
   void wheel_rest_enc();
-  float pid_control(int target);
+  long pid_control(long target);
   long get_encoder_count();
   long get_motor_rpms();
 

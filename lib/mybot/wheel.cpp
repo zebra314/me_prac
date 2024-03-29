@@ -32,7 +32,7 @@ void encoder_isr() {
 
 void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, 
                           byte encoder_pin_a, byte encoder_pin_b,
-                          float kp, float ki, float kd) {
+                          long kp, long ki, long kd) {
   this->dc_pin_dig_1 = dc_pin_dig_1;
   this->dc_pin_dig_2 = dc_pin_dig_2;
   this->dc_pin_pwm = dc_pin_pwm;
@@ -111,20 +111,20 @@ void Wheel::wheel_pwm_ctrl(int pwm) {
   analogWrite(this->dc_pin_pwm, abs(pwm));
 }
 
-void Wheel::wheel_posi_ctrl(int posi) {
-  int pwm = pid_control(posi);
+void Wheel::wheel_posi_ctrl(long posi) {
+  int pwm = (int) pid_control(posi);
   wheel_pwm_ctrl(pwm);
 }
 
-float Wheel::pid_control(int target) {
+long Wheel::pid_control(long target) {
   long current_time = micros();
-  float dt = (current_time - this->prev_time_pid) / 1.0e6;
+  long dt = (current_time - this->prev_time_pid) / 1.0e6;
 
-  int error = wheel_instance[this->interrupt_num]->encoder_count - target;
-  float error_derivative = (error - this->prev_error) / dt;
+  long error = wheel_instance[this->interrupt_num]->encoder_count - target;
+  long error_derivative = (error - this->prev_error) / dt;
   this->error_integral += error * dt;
 
-  float output = this->kp * error + this->ki * this->error_integral + this->kd * error_derivative;
+  long output = this->kp * error + this->ki * this->error_integral + this->kd * error_derivative;
 
   this->prev_time_pid = current_time;
   this->prev_error = error;
