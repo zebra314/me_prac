@@ -137,7 +137,7 @@ public:
 
   /* BASIC */
   void plate_connect();
-  bool plate_command(Command command, long value);
+  bool plate_command(Command command, double value);
   void plate_rest_enc();
   void plate_get_serial_input();
 };
