@@ -20,23 +20,25 @@ void loop() {
   
   switch (rcv)
   {
-  case FORWARD
+  case FORWARD:
+    plate.plate_command(Command::LINEAR_VEL, 0.4);
     break;
 
-  case BACKWARD
+  case BACKWARD:
+    plate.plate_command(Command::LINEAR_VEL, -0.4);
     break;
 
-  case CLOCKWISE
+  case CLOCKWISE:
+    plate.plate_command(Command::ANGULAR_VEL, 0.4);
     break;
 
-  case COUNTER_CLOCKWISE
+  case COUNTER_CLOCKWISE:
+    plate.plate_command(Command::ANGULAR_VEL, -0.4);
     break;
 
   default:
     break;
   }
 
-
-  plate.plate_command(Command::LINEAR_VEL, 0.4);
-  plate.plate_command(Command::DEBUG, 0);
+  // plate.plate_command(Command::DEBUG, 0);
 }
