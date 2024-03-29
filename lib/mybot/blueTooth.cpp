@@ -1,8 +1,14 @@
-#include "blueTooth.h"
+// #include "blueTooth.h"
+
+#include <SoftwareSerial.h> 
+
+#define BlueTooth_TX_pin 11
+#define BlueTooth_RX_pin 10
+#define BlueTooth_BaudRate 9600
 
 SoftwareSerial BT(BlueTooth_RX_pin, BlueTooth_TX_pin);
 
-void BlueTooth_setup(){
+void BlueTooth_setup() {
     BT.begin(BlueTooth_BaudRate);
 }
 
