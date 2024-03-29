@@ -75,7 +75,7 @@ bool Plate::plate_command(Command command, float value) {
   plate_update_state();
 
   if(command == Command::DEBUG && debug == DEBUG::TEXT) {
-    plate_check_info();
+    plate_print_info();
     return done;
   } else if(command == Command::DEBUG && debug == DEBUG::PLOT) {
     plotter.Plot();
@@ -165,7 +165,7 @@ bool Plate::plate_command(Command command, float value) {
 
 // }
 
-void Plate::plate_check_info() {
+void Plate::plate_print_info() {
   // Print every 0.1 second
   if(current_time - print_time_flag < 20000) {
     return;

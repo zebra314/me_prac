@@ -116,7 +116,7 @@ private:
 
   DEBUG debug;
 
-  void plate_check_info();
+  void plate_print_info();
   void plate_update_state();
   void plate_move();
 
