@@ -98,8 +98,8 @@ bool Plate::plate_command(Command command, float value) {
         FL_target += delta_target;
         BR_target += delta_target;
         BL_target += delta_target;
-        Plate::plate_move();
         total_target -= velocity;
+        Plate::plate_move();
         delay(5);
       }
       break;
@@ -114,8 +114,8 @@ bool Plate::plate_command(Command command, float value) {
         FL_target -= delta_target;
         BR_target += delta_target;
         BL_target -= delta_target;
-        Plate::plate_move();
         total_target -= omega;
+        Plate::plate_move();
         delay(5);
       }
       break;
