@@ -17,7 +17,24 @@ void loop() {
 
   // read the bluetooth signal and translate it to command
   BlueTooth_read(&rcv);
-  cmd = (*rcv) >> 4;
+  
+  switch (rcv)
+  {
+  case FORWARD
+    break;
+
+  case BACKWARD
+    break;
+
+  case CLOCKWISE
+    break;
+
+  case COUNTER_CLOCKWISE
+    break;
+
+  default:
+    break;
+  }
 
 
   plate.plate_command(Command::LINEAR_VEL, 0.4);
