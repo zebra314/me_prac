@@ -22,7 +22,6 @@ Plate::Plate(DEBUG debug = DEBUG::NONE) {
   FL_target = 0;
   BR_target = 0;
   BL_target = 0;
-
 }
 
 Plate::~Plate() {
@@ -75,7 +74,7 @@ bool Plate::plate_command(Command command, float value) {
 
   // Control variables
   float velocity, omega;
-  float delta_target;
+  float delta_target, total_target;
   float pulse_per_turn = PPR * GEAR_RATIO;
   float pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
 
@@ -90,21 +89,35 @@ bool Plate::plate_command(Command command, float value) {
       break;
 
     case Command::LINEAR_POSI:
+      total_target = value; // meters
       velocity = 0.4;
       delta_target = velocity * pulse_per_meter * (current_time - previous_time) / 1.0e6;
 
-      FR_target += delta_target;
-      FL_target += delta_target;
-      BR_target += delta_target;
-      BL_target += delta_target;
-      Plate::plate_move();
+      while(total_target > 0){
+        FR_target += delta_target;
+        FL_target += delta_target;
+        BR_target += delta_target;
+        BL_target += delta_target;
+        Plate::plate_move();
+        total_target -= velocity;
+        delay(100);
+      }
       break;
     
     case Command::ANGULAR_POSI:
-      FR.wheel_posi_ctrl(value);
-      FL.wheel_posi_ctrl(-value);
-      BR.wheel_posi_ctrl(value);
-      BL.wheel_posi_ctrl(-value);
+      total_target = value; // radians
+      omega = 0.4;
+      delta_target = omega * pulse_per_meter * (current_time - previous_time) / 1.0e6;
+
+      while(total_target > 0){
+        FR_target += delta_target;
+        FL_target -= delta_target;
+        BR_target += delta_target;
+        BL_target -= delta_target;
+        Plate::plate_move();
+        total_target -= omega;
+        delay(100);
+      }
       break;
     
     case Command::LINEAR_VEL:
@@ -230,7 +243,6 @@ void Plate::plate_update_state() {
   
   previous_time = current_time;
   current_time = micros();
-
 }
 
 void Plate::plate_move() {
