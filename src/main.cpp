@@ -4,8 +4,13 @@
 #include "wheel.h"
 #include "arm.h"
 #include "plate.h"
+#include "blueTooth.h"
 
 #define ENABLE_PLOTTER
+
+// these are bluetooth related code
+char rcv;
+Command cmd;
 
 Plate plate;
 
@@ -19,16 +24,29 @@ void setup() {
   #ifndef ENABLE_PLOTTER 
   Serial.begin(9600);
   #endif
-
   plate.plate_connect();
   
   #ifdef ENABLE_PLOTTER
   plotter.Begin();
   plotter.AddTimeGraph("Motor position", 5000, "FL", FL_motor_posi, "BL", BL_motor_posi);
   #endif
+
+  // bluetooth setup
+  BlueTooth_setup();
+
 }
 
 void loop() {
+
+  // read the bluetooth signal and translate it to command
+  BlueTooth_read(&rcv);
+  cmd = (*rcv) >> 4;
+
+  #ifndef ENABLE_PLOTTER
+  Serial.print("BlueTooth receive: %d\n", *rcv);
+  #endif
+
+
   plate.plate_command(Command::LINEAR_VEL, 0.4);
   // plate.plate_command(Command::LINEAR_VEL, 0.7);
   
