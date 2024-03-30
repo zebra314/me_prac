@@ -93,10 +93,10 @@ void Wheel::encoder_read() {
   }
   
   double dt = micros() - this->vel_time_flag;
-  long dt = current_time - this->rpm_time_flag;
-  if (dt > 100000) {
+  if (dt > VEL_TRIGGER_LOWER_BOUND) {
+    this->vel = (encoder_count - this->encoder_count_flag) * 60.0 / (PPR * GEAR_RATIO) / (dt / 1.0e6);
     this->encoder_count_flag = encoder_count;
-    this->rpm_time_flag = current_time;
+    this->vel_time_flag = micros();
   }
 
 }
@@ -203,18 +203,17 @@ double Wheel::comp_pid(double target_vel_, double target_pos) {
   return output;
 }
 
-long Wheel::get_encoder_count() {
+double Wheel::get_encoder_count() {
   return wheel_instance[this->interrupt_num]->encoder_count;
 }
 
-long Wheel::get_motor_rpms() {
-  long current_time = micros();
-  if ((current_time - this->rpm_time_flag) > 700000) {
-    this->rpms = 0;
-  } else {
-    this->rpms = (encoder_count - this->encoder_count_flag) * 60.0 / (PPR * GEAR_RATIO) / ((current_time - this->rpm_time_flag) / 1.0e6);
+double Wheel::get_motor_vel() {
+  double current_time = micros();
+  if ((current_time - this->vel_time_flag) > VEL_TRIGGER_UPPER_BOUND) {
+    this->vel = 0;
   }
-  return wheel_instance[this->interrupt_num]->rpms;
+
+  return wheel_instance[this->interrupt_num]->vel;
 }
 
 void Wheel::wheel_rest_enc() {

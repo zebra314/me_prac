@@ -8,6 +8,8 @@
 
 #define PPR 11
 #define GEAR_RATIO 50
+#define VEL_TRIGGER_LOWER_BOUND 50000 // ms // Dead zone
+#define VEL_TRIGGER_UPPER_BOUND 700000 // ms // To detect static condition
 
 class Wheel {
 private:
