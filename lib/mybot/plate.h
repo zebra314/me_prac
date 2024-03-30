@@ -7,16 +7,16 @@
 
 enum class Command:char {
   LINEAR_PWM,
-  ANGULAR_PWM,
-  LINEAR_POSI,
+  LINEAR_POS,
   LINEAR_VEL,
-  ANGULAR_POSI,
-  ANGULAR_VEL,
   LINEAR_COMP,
+  ANGULAR_PWM,
+  ANGULAR_POS,
+  ANGULAR_VEL,
   ANGULAR_COMP,
   PAUSE,
-  DEBUG,
   RESET,
+  DEBUG,
 };
 
 enum class DEBUG:char {
@@ -39,6 +39,8 @@ private:
   Wheel BR;
   Wheel BL;
   Arm arm;
+  DEBUG debug;
+  Plotter plotter;
 
   double FR_enc_count;
   double FL_enc_count;
@@ -53,10 +55,6 @@ private:
   double current_time;
   double previous_time;
   double print_time_flag;
-
-  Plotter plotter;
-
-  DEBUG debug;
 
   void plate_print_info();
   void plate_update_state();

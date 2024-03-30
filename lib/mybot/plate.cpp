@@ -65,115 +65,110 @@ void Plate::plate_get_serial_input() {
 */
 
 bool Plate::plate_command(Command command, double value) {
-  // valuse: meter, radian, m/s, rad/s, pwm
-  double pulse_per_turn = PPR * GEAR_RATIO;
-  double pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
-  double wheel_pps, target_pwm, target_pos, target_vel;
+  // units: meter, radian, m/s, rad/s, pwm
+  double target_pwm, target_pos, target_vel;
 
   plate_update_state();
   switch (command) {
-    case Command::DEBUG:
-      if(debug == DEBUG::TEXT) {
-        plate_print_info();
-      } else if(debug == DEBUG::PLOT) {
-        plotter.Plot();
-      }
-      break;
+
+  case Command::LINEAR_PWM:
+    target_pwm = value;
+
+    FR.wheel_pwm_ctrl(target_pwm);
+    FL.wheel_pwm_ctrl(target_pwm);
+    BR.wheel_pwm_ctrl(target_pwm);
+    BL.wheel_pwm_ctrl(target_pwm);
+    break;
+
+  case Command::LINEAR_POS:
+    target_pos = value * PULSE_PER_METER; // pulses
     
-    case Command::LINEAR_PWM:
-      target_pwm = value;
+    FR.wheel_pos_ctrl(target_pos);
+    FL.wheel_pos_ctrl(target_pos);
+    BR.wheel_pos_ctrl(target_pos);
+    BL.wheel_pos_ctrl(target_pos);
+    break;
 
-      FR.wheel_pwm_ctrl(target_pwm);
-      FL.wheel_pwm_ctrl(target_pwm);
-      BR.wheel_pwm_ctrl(target_pwm);
-      BL.wheel_pwm_ctrl(target_pwm);
-      break;
+  case Command::LINEAR_VEL:
+    target_vel = value * PULSE_PER_METER; // pulses per second
+
+    FR.wheel_vel_ctrl(target_vel);
+    FL.wheel_vel_ctrl(target_vel);
+    BR.wheel_vel_ctrl(target_vel);
+    BL.wheel_vel_ctrl(target_vel);
+    break;
+
+  case Command::LINEAR_COMP:
+    target_pos = value * PULSE_PER_METER; // pulses
+    target_vel = 0.5 * PULSE_PER_METER; // pulses per second
+
+    FR.wheel_comp_ctrl(target_vel, target_pos);
+    FL.wheel_comp_ctrl(target_vel, target_pos);
+    BR.wheel_comp_ctrl(target_vel, target_pos);
+    BL.wheel_comp_ctrl(target_vel, target_pos);
+    break;
+
+  case Command::ANGULAR_PWM:
+    target_pwm = value;
+
+    FR.wheel_pwm_ctrl(target_pwm);
+    FL.wheel_pwm_ctrl(-target_pwm);
+    BR.wheel_pwm_ctrl(target_pwm);
+    BL.wheel_pwm_ctrl(-target_pwm);
+    break;
     
-    case Command::ANGULAR_PWM:
-      target_pwm = value;
- 
-      FR.wheel_pwm_ctrl(target_pwm);
-      FL.wheel_pwm_ctrl(-target_pwm);
-      BR.wheel_pwm_ctrl(target_pwm);
-      BL.wheel_pwm_ctrl(-target_pwm);
-      break;
+  case Command::ANGULAR_POS:
+    target_pos = value * PULSE_PER_METER; // pulses
 
-    case Command::LINEAR_POSI:
-      target_pos = value * pulse_per_meter; // pulses
-      
-      FR.wheel_pos_ctrl(target_pos);
-      FL.wheel_pos_ctrl(target_pos);
-      BR.wheel_pos_ctrl(target_pos);
-      BL.wheel_pos_ctrl(target_pos);
-      break;
-    
-    case Command::ANGULAR_POSI:
-      target_pos = value * pulse_per_meter; // pulses
+    FR.wheel_pos_ctrl(target_pos);
+    FL.wheel_pos_ctrl(-target_pos);
+    BR.wheel_pos_ctrl(target_pos);
+    BL.wheel_pos_ctrl(-target_pos);
+    break;
 
-      FR.wheel_pos_ctrl(target_pos);
-      FL.wheel_pos_ctrl(-target_pos);
-      BR.wheel_pos_ctrl(target_pos);
-      BL.wheel_pos_ctrl(-target_pos);
-      break;
-    
-    case Command::LINEAR_VEL:
-      wheel_pps = value * pulse_per_meter; // pulses per second
-      target_vel = wheel_pps;
+  case Command::ANGULAR_VEL:
+    target_vel = value * PULSE_PER_METER; // pulses per second
 
-      FR.wheel_vel_ctrl(target_vel);
-      FL.wheel_vel_ctrl(target_vel);
-      BR.wheel_vel_ctrl(target_vel);
-      BL.wheel_vel_ctrl(target_vel);
-      break;
+    FR.wheel_vel_ctrl(target_vel);
+    FL.wheel_vel_ctrl(-target_vel);
+    BR.wheel_vel_ctrl(target_vel);
+    BL.wheel_vel_ctrl(-target_vel);
+    break;
 
-    case Command::ANGULAR_VEL:
-      wheel_pps = value * pulse_per_meter; // pulses per second
-      target_vel = wheel_pps;
+  case Command::ANGULAR_COMP:
+    target_pos = value * PULSE_PER_METER; // pulses
+    target_vel = 0.5 * PULSE_PER_METER; // pulses per second
 
-      FR.wheel_vel_ctrl(target_vel);
-      FL.wheel_vel_ctrl(-target_vel);
-      BR.wheel_vel_ctrl(target_vel);
-      BL.wheel_vel_ctrl(-target_vel);
-      break;
-    
-    // case Command::LINEAR_COMP:
-    //   wheel_pps = value * pulse_per_meter; // pulses per second
-    //   target_vel = wheel_pps;
-    //   target_pos = 0;
+    FR.wheel_comp_ctrl(target_vel, target_pos);
+    FL.wheel_comp_ctrl(-target_vel, target_pos);
+    BR.wheel_comp_ctrl(target_vel, target_pos);
+    BL.wheel_comp_ctrl(-target_vel, target_pos);
+    break;
 
-    //   FR.wheel_comp_ctrl(target_vel, target_pos);
-    //   FL.wheel_comp_ctrl(target_vel, target_pos);
-    //   BR.wheel_comp_ctrl(target_vel, target_pos);
-    //   BL.wheel_comp_ctrl(target_vel, target_pos);
-    //   break;
-    
-    // case Command::ANGULAR_COMP:
-    //   wheel_pps = value * pulse_per_meter; // pulses per second
-    //   target_vel = wheel_pps;
-    //   target_pos = 0;
+  case Command::PAUSE:
+    FR.wheel_pwm_ctrl(0);
+    FL.wheel_pwm_ctrl(0);
+    BR.wheel_pwm_ctrl(0);
+    BL.wheel_pwm_ctrl(0);
+    break;
 
-    //   FR.wheel_comp_ctrl(target_vel, target_pos);
-    //   FL.wheel_comp_ctrl(-target_vel, target_pos);
-    //   BR.wheel_comp_ctrl(target_vel, target_pos);
-    //   BL.wheel_comp_ctrl(-target_vel, target_pos);
-    //   break;
+  case Command::RESET:
+    FR.wheel_rest_enc();
+    FL.wheel_rest_enc();
+    BR.wheel_rest_enc();
+    BL.wheel_rest_enc();
+    break;
 
-    case Command::PAUSE:
-      FR.wheel_pwm_ctrl(0);
-      FL.wheel_pwm_ctrl(0);
-      BR.wheel_pwm_ctrl(0);
-      BL.wheel_pwm_ctrl(0);
-      break;
+  case Command::DEBUG:
+    if(debug == DEBUG::TEXT) {
+      plate_print_info();
+    } else if(debug == DEBUG::PLOT) {
+      plotter.Plot();
+    }
+    break;
 
-    case Command::RESET:
-      FR.wheel_rest_enc();
-      FL.wheel_rest_enc();
-      BR.wheel_rest_enc();
-      BL.wheel_rest_enc();
-      break;
-
-    default:
-      break;
+  default:
+    break;
   }
   return true;
 }
@@ -245,17 +240,16 @@ void Plate::plate_rest_enc() {
 }
 
 void Plate::plate_update_state() {
-
   noInterrupts();
   FR_enc_count = FR.get_encoder_count();
   FL_enc_count = FL.get_encoder_count();
   BR_enc_count = BR.get_encoder_count();
   BL_enc_count = BL.get_encoder_count();
   
-  FR_rpm = FR.get_motor_vel(); // pulse_per_turn;
-  FL_rpm = FL.get_motor_vel(); // pulse_per_turn;
-  BR_rpm = BR.get_motor_vel(); // pulse_per_turn;
-  BL_rpm = BL.get_motor_vel(); // pulse_per_turn;
+  FR_rpm = FR.get_motor_vel() / PULSE_PER_TURN;
+  FL_rpm = FL.get_motor_vel() / PULSE_PER_TURN;
+  BR_rpm = BR.get_motor_vel() / PULSE_PER_TURN;
+  BL_rpm = BL.get_motor_vel() / PULSE_PER_TURN;
   interrupts();
   
   previous_time = current_time;

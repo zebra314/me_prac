@@ -7,11 +7,12 @@
   - Mega, Mega2560, MegaADK: 2, 3, 18, 19, 20, 21
 */
 
-
 /* BASIC WHEEL */
 #define PPR 11
 #define GEAR_RATIO 50
 #define WHEEL_DIAMETER 0.1
+#define PULSE_PER_TURN (PPR * GEAR_RATIO)
+#define PULSE_PER_METER (PULSE_PER_TURN / (WHEEL_DIAMETER * PI))
 
 /* FRONT LEFT WHEEL */
 #define FL_dig_pin_1 38
