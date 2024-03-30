@@ -20,15 +20,25 @@ private:
   int interrupt_num;
   volatile double encoder_count;
   volatile double vel_time_flag;
+  volatile double encoder_count_flag;
+  volatile double vel;
 
   /* PID params*/
-  long prev_time_pid;
-  long prev_error;
-  double error_integral;
+  double prev_pos_time;
+  double prev_pos_error;
+  double pos_error_integral;
 
-  double kp;
-  double ki;
-  double kd;
+  double pos_kp;
+  double pos_ki;
+  double pos_kd;
+
+  double prev_vel_time;
+  double prev_vel_error;
+  double vel_error_integral;
+
+  double vel_kp;
+  double vel_ki;
+  double vel_kd;
 
 public:
   Wheel();
@@ -39,8 +49,15 @@ public:
                      double pos_kp, double pos_ki, double pos_kd,
                      double vel_kp, double vel_ki, double vel_kd);
 
-  void wheel_pwm_ctrl(int pwm);
-  void wheel_posi_ctrl(long posi);
+  void wheel_pwm_ctrl(double pwm);
+  void wheel_pos_ctrl(double pos);
+  void wheel_vel_ctrl(double vel);
+  void wheel_comp_ctrl(double vel, double pos);
+
+  double pos_pid(double target);
+  double vel_pid(double target);
+  double comp_pid(double target_vel, double target_pos);
+
   void wheel_rest_enc();
   double get_encoder_count();
   double get_motor_vel();

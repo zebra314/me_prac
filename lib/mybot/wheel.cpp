@@ -118,23 +118,83 @@ void Wheel::wheel_pwm_ctrl(double pwm_) {
   analogWrite(this->dc_pin_pwm, abs(pwm));
 }
 
-void Wheel::wheel_posi_ctrl(long posi) {
-  int pwm = (int) pid_control(posi);
+void Wheel::wheel_pos_ctrl(double pos) {
+  int pwm = (int) (pos_pid(pos));
   wheel_pwm_ctrl(pwm);
 }
 
-double Wheel::pid_control(long target) {
-  long current_time = micros();
-  double dt = (current_time - this->prev_time_pid) / 1.0e6;
+void Wheel::wheel_vel_ctrl(double vel) {
+  int pwm = (int) (vel_pid(vel));
+  wheel_pwm_ctrl(pwm);
+}
 
-  long error = wheel_instance[this->interrupt_num]->encoder_count - target;
-  double error_derivative = (error - this->prev_error) / dt;
-  this->error_integral += error * dt;
+void Wheel::wheel_comp_ctrl(double vel, double pos) {
+  int pwm = (int) (comp_pid(vel, pos));
+  wheel_pwm_ctrl(pwm);
+}
 
-  double output = this->kp * error + this->ki * this->error_integral + this->kd * error_derivative;
+double Wheel::pos_pid(double target) {
+  double current_time = micros();
+  double dt = (current_time - this->prev_pos_time) / 1.0e6;
 
-  this->prev_time_pid = current_time;
-  this->prev_error = error;
+  double error = wheel_instance[this->interrupt_num]->encoder_count - target;
+  double error_derivative = (error - this->prev_pos_error) / dt;
+  this->pos_error_integral += error * dt;
+
+  double output = this->pos_kd * error + this->pos_ki * this->pos_error_integral + this->pos_kd * error_derivative;
+
+  this->prev_pos_time = current_time;
+  this->prev_pos_error = error;
+
+  return output;
+}
+
+double Wheel::vel_pid(double target) {
+  double current_time = micros();
+  double dt = (current_time - this->prev_vel_time) / 1.0e6;
+
+  double error = wheel_instance[this->interrupt_num]->vel - target;
+  double error_derivative = (error - this->prev_vel_error) / dt;
+  this->vel_error_integral += error * dt;
+
+  double output = this->vel_kp * error + this->vel_ki * this->vel_error_integral + this->vel_kd * error_derivative;
+
+  this->prev_vel_time = current_time;
+  this->prev_vel_error = error;
+
+  return output;
+}
+
+double Wheel::comp_pid(double target_vel_, double target_pos) {
+  double target_vel = fabs(target_vel_);
+  
+  double current_time = micros();
+  double dt = (current_time - this->prev_vel_time) / 1.0e6;
+
+  double pos_error = wheel_instance[this->interrupt_num]->encoder_count - target_pos;
+  double vel_error = wheel_instance[this->interrupt_num]->vel - target_vel;
+
+  double pos_error_derivative = (pos_error - this->prev_pos_error) / dt;
+  double vel_error_derivative = (vel_error - this->prev_vel_error) / dt;
+  
+  this->pos_error_integral += pos_error * dt;
+  this->vel_error_integral += vel_error * dt;
+
+  double pos_output = this->pos_kd * pos_error + this->pos_ki * this->pos_error_integral + this->pos_kd * pos_error_derivative;
+  double vel_output = this->vel_kp * vel_error + this->vel_ki * this->vel_error_integral + this->vel_kd * vel_error_derivative;
+
+  double pos_weight_base = 100;
+  double pos_error_percent = fabs(pos_error) / target_pos; // Value domain: [0, 1]
+  double pos_weight = pow(pos_weight_base, pos_error_percent) / pos_weight_base; // Value domain: [~0, 1]
+  double vel_weight = 1 - pos_weight;
+  
+  double output = pos_output * pos_weight + vel_output * vel_weight;
+
+  this->prev_pos_time = current_time;
+  this->prev_vel_time = current_time;
+
+  this->prev_pos_error = pos_error;
+  this->prev_vel_error = vel_error;
 
   return output;
 }

@@ -64,21 +64,11 @@ void Plate::plate_get_serial_input() {
   pulse per meter = 550 / (wheel diameter * PI)
 */
 
-bool done = false;
-bool not_done = true;
-
-// Control variables
-double control_unit = 5.0; // pulses
-double pulse_per_turn = PPR * GEAR_RATIO;
-double pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
-double plate_vel, plate_omega, wheel_pps;
-double target;
-long start_time;
-int delay_time; // us
-int offset_delay; // us
-
 bool Plate::plate_command(Command command, double value) {
   // valuse: meter, radian, m/s, rad/s, pwm
+  double pulse_per_turn = PPR * GEAR_RATIO;
+  double pulse_per_meter = pulse_per_turn / (WHEEL_DIAMETER * PI);
+  double wheel_pps, target_pwm, target_pos, target_vel;
 
   plate_update_state();
   switch (command) {
@@ -91,97 +81,82 @@ bool Plate::plate_command(Command command, double value) {
       break;
     
     case Command::LINEAR_PWM:
-      FR.wheel_pwm_ctrl((int) value);
-      FL.wheel_pwm_ctrl((int) value);
-      BR.wheel_pwm_ctrl((int) value);
-      BL.wheel_pwm_ctrl((int) value);
+      target_pwm = value;
+
+      FR.wheel_pwm_ctrl(target_pwm);
+      FL.wheel_pwm_ctrl(target_pwm);
+      BR.wheel_pwm_ctrl(target_pwm);
+      BL.wheel_pwm_ctrl(target_pwm);
       break;
     
     case Command::ANGULAR_PWM:
-      FR.wheel_pwm_ctrl((int) value);
-      FL.wheel_pwm_ctrl((int) -value);
-      BR.wheel_pwm_ctrl((int) value);
-      BL.wheel_pwm_ctrl((int) -value);
+      target_pwm = value;
+ 
+      FR.wheel_pwm_ctrl(target_pwm);
+      FL.wheel_pwm_ctrl(-target_pwm);
+      BR.wheel_pwm_ctrl(target_pwm);
+      BL.wheel_pwm_ctrl(-target_pwm);
       break;
 
     case Command::LINEAR_POSI:
-      plate_vel = 0.5; // m/s
-      wheel_pps = plate_vel * pulse_per_meter; // pulses per second
-      target = value * pulse_per_meter; // pulses
-      delay_time = 1.0e6 / (wheel_pps / control_unit); // us
+      target_pos = value * pulse_per_meter; // pulses
       
-      start_time = micros();
-      while(target > 0){
-        current_time = micros();
-        FR_target += control_unit;
-        FL_target += control_unit;
-        BR_target += control_unit;
-        BL_target += control_unit;
-        target -= control_unit;
-
-        Plate::plate_move();
-
-        offset_delay = (micros() - current_time);
-        delayMicroseconds(delay_time - offset_delay);
-      }
+      FR.wheel_pos_ctrl(target_pos);
+      FL.wheel_pos_ctrl(target_pos);
+      BR.wheel_pos_ctrl(target_pos);
+      BL.wheel_pos_ctrl(target_pos);
       break;
     
     case Command::ANGULAR_POSI:
-      plate_vel = 0.5; // m/s
-      wheel_pps = plate_vel * pulse_per_meter; // pulses per second
-      target = value * pulse_per_meter; // pulses
-      delay_time = 1.0e6 / (wheel_pps / control_unit); // ms
+      target_pos = value * pulse_per_meter; // pulses
 
-      while(target > 0){
-        current_time = micros();
-        FR_target += control_unit;
-        FL_target -= control_unit;
-        BR_target += control_unit;
-        BL_target -= control_unit;
-        target -= control_unit;
-
-        Plate::plate_move();
-
-        offset_delay = (micros() - current_time);
-        delayMicroseconds(delay_time - offset_delay);
-      }
+      FR.wheel_pos_ctrl(target_pos);
+      FL.wheel_pos_ctrl(-target_pos);
+      BR.wheel_pos_ctrl(target_pos);
+      BL.wheel_pos_ctrl(-target_pos);
       break;
     
     case Command::LINEAR_VEL:
-      current_time = micros();
+      wheel_pps = value * pulse_per_meter; // pulses per second
+      target_vel = wheel_pps;
 
-      plate_vel = value;
-      wheel_pps = plate_vel * pulse_per_meter; // pulses per second
-      delay_time = 1.0e6 / (wheel_pps / control_unit); // ms
-
-      FR_target += control_unit;
-      FL_target += control_unit;
-      BR_target += control_unit;
-      BL_target += control_unit;
-
-      Plate::plate_move();
-
-      offset_delay = (micros() - current_time);
-      delayMicroseconds(delay_time - offset_delay);
+      FR.wheel_vel_ctrl(target_vel);
+      FL.wheel_vel_ctrl(target_vel);
+      BR.wheel_vel_ctrl(target_vel);
+      BL.wheel_vel_ctrl(target_vel);
       break;
 
     case Command::ANGULAR_VEL:
-      current_time = micros();
+      wheel_pps = value * pulse_per_meter; // pulses per second
+      target_vel = wheel_pps;
 
-      plate_vel = value;
-      wheel_pps = plate_vel * pulse_per_meter; // pulses per second
-      delay_time = 1000 / (wheel_pps / control_unit); // ms
-
-      FR_target += control_unit;
-      FL_target -= control_unit;
-      BR_target += control_unit;
-      BL_target -= control_unit;
-
-      Plate::plate_move();
-
-      offset_delay = (micros() - current_time);
-      delayMicroseconds(delay_time - offset_delay);
+      FR.wheel_vel_ctrl(target_vel);
+      FL.wheel_vel_ctrl(-target_vel);
+      BR.wheel_vel_ctrl(target_vel);
+      BL.wheel_vel_ctrl(-target_vel);
       break;
+    
+    // case Command::LINEAR_COMP:
+    //   wheel_pps = value * pulse_per_meter; // pulses per second
+    //   target_vel = wheel_pps;
+    //   target_pos = 0;
+
+    //   FR.wheel_comp_ctrl(target_vel, target_pos);
+    //   FL.wheel_comp_ctrl(target_vel, target_pos);
+    //   BR.wheel_comp_ctrl(target_vel, target_pos);
+    //   BL.wheel_comp_ctrl(target_vel, target_pos);
+    //   break;
+    
+    // case Command::ANGULAR_COMP:
+    //   wheel_pps = value * pulse_per_meter; // pulses per second
+    //   target_vel = wheel_pps;
+    //   target_pos = 0;
+
+    //   FR.wheel_comp_ctrl(target_vel, target_pos);
+    //   FL.wheel_comp_ctrl(-target_vel, target_pos);
+    //   BR.wheel_comp_ctrl(target_vel, target_pos);
+    //   BL.wheel_comp_ctrl(-target_vel, target_pos);
+    //   break;
 
     case Command::PAUSE:
       FR.wheel_pwm_ctrl(0);
@@ -190,14 +165,17 @@ bool Plate::plate_command(Command command, double value) {
       BL.wheel_pwm_ctrl(0);
       break;
 
-    case Command::RECORD:
-      FR.wheel_pwm_ctrl(0);
-      FL.wheel_pwm_ctrl(0);
-      BR.wheel_pwm_ctrl(0);
-      BL.wheel_pwm_ctrl(0);
+    case Command::RESET:
+      FR.wheel_rest_enc();
+      FL.wheel_rest_enc();
+      BR.wheel_rest_enc();
+      BL.wheel_rest_enc();
+      break;
+
+    default:
       break;
   }
-  return done;
+  return true;
 }
 
 // bool Plate::plate_before_take_ball(){
@@ -282,11 +260,4 @@ void Plate::plate_update_state() {
   
   previous_time = current_time;
   current_time = micros();
-}
-
-void Plate::plate_move() {
-  FR.wheel_posi_ctrl(FR_target);
-  FL.wheel_posi_ctrl(FL_target);
-  BR.wheel_posi_ctrl(BR_target);
-  BL.wheel_posi_ctrl(BL_target);
 }

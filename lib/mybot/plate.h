@@ -69,9 +69,11 @@ enum class Command:char {
   LINEAR_VEL,
   ANGULAR_POSI,
   ANGULAR_VEL,
+  LINEAR_COMP,
+  ANGULAR_COMP,
   PAUSE,
-  RECORD,
   DEBUG,
+  RESET,
 };
 
 enum class DEBUG:char {
@@ -115,7 +117,6 @@ private:
 
   void plate_print_info();
   void plate_update_state();
-  void plate_move();
 
 public:
   Plate(DEBUG debug);
