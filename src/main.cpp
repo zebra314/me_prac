@@ -5,7 +5,6 @@
 // BT param
 char rcv = 0x04;
 
-Command cmd;
 Plate plate(DEBUG::NONE);
 
 void setup() {
