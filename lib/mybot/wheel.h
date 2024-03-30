@@ -29,6 +29,7 @@ private:
   double prev_pos_time;
   double prev_pos_error;
   double pos_error_integral;
+  double pos_error_max;
 
   double pos_kp;
   double pos_ki;

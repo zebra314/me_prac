@@ -183,12 +183,14 @@ double Wheel::comp_pid(double target_vel_, double target_pos) {
   this->pos_error_integral += pos_error * dt;
   this->vel_error_integral += vel_error * dt;
 
+  this->pos_error_max = fmax(this->pos_error_max, pos_error);
+
   double pos_output = this->pos_kd * pos_error + this->pos_ki * this->pos_error_integral + this->pos_kd * pos_error_derivative;
   double vel_output = this->vel_kp * vel_error + this->vel_ki * this->vel_error_integral + this->vel_kd * vel_error_derivative;
 
   double pos_weight_base = 100;
-  double pos_error_percent = fabs(pos_error) / target_pos; // Value domain: [0, 1]
-  double pos_weight = pow(pos_weight_base, pos_error_percent) / pos_weight_base; // Value domain: [~0, 1]
+  double pos_error_percent = fabs(pos_error) / this->pos_error_max; // Value domain: [0, 1]
+  double pos_weight = (pow(pos_weight_base, (pos_error_percent - 1)) - 1) / (pos_weight_base - 1); // Value domain: [~0, 1]
   double vel_weight = 1 - pos_weight;
   
   double output = pos_output * pos_weight + vel_output * vel_weight;
