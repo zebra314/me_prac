@@ -25,10 +25,10 @@ Plate::~Plate() {
 }
 
 void Plate::plate_connect() {
-  FR.wheel_connect(FR_dig_pin_1, FR_dig_pin_2, FR_pwm_pin, FR_enc_pin_a, FR_enc_pin_b, FR_kp, FR_ki, FR_kd);
-  // FL.wheel_connect(FL_dig_pin_1, FL_dig_pin_2, FL_pwm_pin, FL_enc_pin_a, FL_enc_pin_b, FL_kp, FL_ki, FL_kd);
-  BR.wheel_connect(BR_dig_pin_1, BR_dig_pin_2, BR_pwm_pin, BR_enc_pin_a, BR_enc_pin_b, BR_kp, BR_ki, BR_kd);
-  // BL.wheel_connect(BL_dig_pin_1, BL_dig_pin_2, BL_pwm_pin, BL_enc_pin_a, BL_enc_pin_b, BL_kp, BL_ki, BL_kd);
+  FR.wheel_connect(FR_dig_pin_1, FR_dig_pin_2, FR_pwm_pin, FR_enc_pin_a, FR_enc_pin_b, FR_pos_kp, FR_pos_ki, FR_pos_kd, FR_vel_kp, FR_vel_ki, FR_vel_kd);
+  FL.wheel_connect(FL_dig_pin_1, FL_dig_pin_2, FL_pwm_pin, FL_enc_pin_a, FL_enc_pin_b, FL_pos_kp, FL_pos_ki, FL_pos_kd, FL_vel_kp, FL_vel_ki, FL_vel_kd);
+  BR.wheel_connect(BR_dig_pin_1, BR_dig_pin_2, BR_pwm_pin, BR_enc_pin_a, BR_enc_pin_b, BR_pos_kp, BR_pos_ki, BR_pos_kd, FL_vel_kp, FL_vel_ki, FL_vel_kd);
+  BL.wheel_connect(BL_dig_pin_1, BL_dig_pin_2, BL_pwm_pin, BL_enc_pin_a, BL_enc_pin_b, BL_pos_kp, BL_pos_ki, BL_pos_kd, FL_vel_kp, FL_vel_ki, FL_vel_kd);
   // arm.arm_connect(ARM_pin_0, ARM_pin_1, ARM_pin_2, ARM_pin_3, ARM_pin_4, ARM_pin_gripper);
 
   if(debug == DEBUG::PLOT) {

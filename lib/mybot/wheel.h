@@ -40,7 +40,8 @@ public:
   
   void wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, 
                      byte encoder_pin_a, byte encoder_pin_b,
-                     double kp, double ki, double kd);
+                     double pos_kp, double pos_ki, double pos_kd,
+                     double vel_kp, double vel_ki, double vel_kd);
 
   void wheel_pwm_ctrl(int pwm);
   void wheel_posi_ctrl(long posi);

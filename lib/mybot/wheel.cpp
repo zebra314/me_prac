@@ -32,7 +32,9 @@ void encoder_isr() {
 
 void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm, 
                           byte encoder_pin_a, byte encoder_pin_b,
-                          double kp, double ki, double kd) {
+                          double pos_kp, double pos_ki, double pos_kd,
+                          double vel_kp, double vel_ki, double vel_kd) {
+
   this->dc_pin_dig_1 = dc_pin_dig_1;
   this->dc_pin_dig_2 = dc_pin_dig_2;
   this->dc_pin_pwm = dc_pin_pwm;
@@ -41,9 +43,13 @@ void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm,
   this->encoder_pin_b = encoder_pin_b;
   this->interrupt_num = digitalPinToInterrupt(encoder_pin_a);
 
-  this->kp = kp;
-  this->kd = kd;
-  this->ki = ki;
+  this->pos_kp = pos_kp;
+  this->pos_kd = pos_kd;
+  this->pos_ki = pos_ki;
+
+  this->vel_kp = vel_kp;
+  this->vel_kd = vel_kd;
+  this->vel_ki = vel_ki;
 
   pinMode(this->dc_pin_dig_1, OUTPUT);
   pinMode(this->dc_pin_dig_2, OUTPUT);
