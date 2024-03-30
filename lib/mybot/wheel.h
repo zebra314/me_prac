@@ -17,13 +17,9 @@ private:
   byte dc_pin_pwm;
 
   /* Encoder */
-  volatile long encoder_count;
   int interrupt_num;
-
-  /* RPMs */
-  volatile long rpm_time_flag;
-  volatile long encoder_count_flag;
-  volatile long rpms;
+  volatile double encoder_count;
+  volatile double vel_time_flag;
 
   /* PID params*/
   long prev_time_pid;
@@ -46,9 +42,8 @@ public:
   void wheel_pwm_ctrl(int pwm);
   void wheel_posi_ctrl(long posi);
   void wheel_rest_enc();
-  double pid_control(long target);
-  long get_encoder_count();
-  long get_motor_rpms();
+  double get_encoder_count();
+  double get_motor_vel();
 
   /* Encoder items called by static function */
   byte encoder_pin_a;

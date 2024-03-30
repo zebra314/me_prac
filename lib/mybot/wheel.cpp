@@ -88,7 +88,7 @@ void Wheel::encoder_read() {
     this->encoder_count++;
   }
   
-  long current_time = micros();
+  double dt = micros() - this->vel_time_flag;
   long dt = current_time - this->rpm_time_flag;
   if (dt > 100000) {
     this->encoder_count_flag = encoder_count;
@@ -97,7 +97,8 @@ void Wheel::encoder_read() {
 
 }
 
-void Wheel::wheel_pwm_ctrl(int pwm) {
+void Wheel::wheel_pwm_ctrl(double pwm_) {
+  int pwm = (int) pwm_;
   if (pwm > 0) {
     digitalWrite(this->dc_pin_dig_1, HIGH);
     digitalWrite(this->dc_pin_dig_2, LOW);

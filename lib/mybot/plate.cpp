@@ -228,30 +228,30 @@ void Plate::plate_print_info() {
   
   // Serial.println(horizontal_line);
   Serial.print("| FR: ");
-  Serial.print((float)FR_enc_count / 100.0, 2);
+  Serial.print((double)FR_enc_count / 100.0, 2);
   Serial.print(separator);
-  Serial.print((float)FR_rpms / 100.0, 2);
+  Serial.print((double)FR_rpm / 100.0, 2);
   Serial.println(" |");
 
   // Serial.println(horizontal_line);
   Serial.print("| FL: ");
-  Serial.print((float)FL_enc_count / 100.0, 2);
+  Serial.print((double)FL_enc_count / 100.0, 2);
   Serial.print(separator);
-  Serial.print((float)FL_rpms / 100.0, 2);
+  Serial.print((double)FL_rpm / 100.0, 2);
   Serial.println(" |");
 
   // Serial.println(horizontal_line);
   Serial.print("| BR: ");
-  Serial.print((float)BR_enc_count / 100.0, 2);
+  Serial.print((double)BR_enc_count / 100.0, 2);
   Serial.print(separator);
-  Serial.print((float)BR_rpms / 100.0, 2);
+  Serial.print((double)BR_rpm / 100.0, 2);
   Serial.println(" |");
 
   // Serial.println(horizontal_line);
   Serial.print("| BL: ");
-  Serial.print((float)BL_enc_count / 100.0, 2);
+  Serial.print((double)BL_enc_count / 100.0, 2);
   Serial.print(separator);
-  Serial.print((float)BL_rpms / 100.0, 2);
+  Serial.print((double)BL_rpm / 100.0, 2);
   Serial.println(" |");
 
   // Serial.println(horizontal_line);

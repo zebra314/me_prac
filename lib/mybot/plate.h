@@ -95,24 +95,19 @@ private:
   Wheel BL;
   Arm arm;
 
-  long FR_enc_count;
-  long FL_enc_count;
-  long BR_enc_count;
-  long BL_enc_count;
+  double FR_enc_count;
+  double FL_enc_count;
+  double BR_enc_count;
+  double BL_enc_count;
 
-  long FR_rpms;
-  long FL_rpms;
-  long BR_rpms;
-  long BL_rpms;
+  double FR_rpm;
+  double FL_rpm;
+  double BR_rpm;
+  double BL_rpm;
 
-  long FR_target;
-  long FL_target;
-  long BR_target;
-  long BL_target;
-
-  long current_time;
-  long previous_time;
-  long print_time_flag;
+  double current_time;
+  double previous_time;
+  double print_time_flag;
 
   Plotter plotter;
 
