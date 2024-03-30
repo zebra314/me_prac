@@ -63,7 +63,6 @@ void Wheel::wheel_connect(byte dc_pin_dig_1, byte dc_pin_dig_2, byte dc_pin_pwm,
   pinMode(this->encoder_pin_b, INPUT);
 
   // The encoder_isr function is a template function, whcih takes the a constant integer as a template argument.
-  Serial.println(this->interrupt_num);
   #ifdef ENABLE_ENCODER
   switch (interrupt_num) {
     case 0:
