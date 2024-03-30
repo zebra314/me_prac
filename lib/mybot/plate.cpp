@@ -1,5 +1,4 @@
 #include "plate.h"
-#include "wheel_settings.h"
 
 Plate::Plate(DEBUG debug = DEBUG::NONE) {
   // Constructor

@@ -3,6 +3,7 @@
 
 #include "wheel.h"
 #include "arm.h"
+#include "wheel_settings.h"
 #include <Plotter.h>
 
 enum class Command:char {
