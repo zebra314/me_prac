@@ -7,15 +7,19 @@ Wheel::Wheel() {
   encoder_count = 0;
   interrupt_num = 0;
 
-  // RPMs
-  rpm_time_flag = micros();
+  // vels
+  vel_time_flag = micros();
   encoder_count_flag = 0;
-  rpms = 0;
+  vel = 0;
 
   // PID params
-  prev_time_pid = 0;
-  prev_error = 0;
-  error_integral = 0;
+  prev_pos_time = 0;
+  prev_pos_error = 0;
+  pos_error_integral = 0;
+
+  prev_vel_time = 0;
+  prev_vel_error = 0;
+  vel_error_integral = 0;
 }
 
 Wheel::~Wheel() {
