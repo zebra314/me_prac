@@ -13,15 +13,10 @@ Plate::Plate(DEBUG debug = DEBUG::NONE) {
   BR_enc_count = 0;
   BL_enc_count = 0;
 
-  FR_rpms = 0;
-  FL_rpms = 0;
-  BR_rpms = 0;
-  BL_rpms = 0;
-
-  FR_target = 0;
-  FL_target = 0;
-  BR_target = 0;
-  BL_target = 0;
+  FR_rpm = 0;
+  FL_rpm = 0;
+  BR_rpm = 0;
+  BL_rpm = 0;
 }
 
 Plate::~Plate() {
@@ -38,7 +33,7 @@ void Plate::plate_connect() {
   if(debug == DEBUG::PLOT) {
     plotter.Begin();
     plotter.AddTimeGraph("Motor position", 5000, "FR", FR_enc_count, "BR", BR_enc_count);
-    plotter.AddTimeGraph("Motor RPMs", 5000, "FR", FR_rpms, "BR", BR_rpms);
+    plotter.AddTimeGraph("Motor rpm", 5000, "FR", FR_rpm, "BR", BR_rpm);
   } else if(debug == DEBUG::TEXT) {
     Serial.begin(9600);
   }
@@ -275,13 +270,13 @@ void Plate::plate_update_state() {
   noInterrupts();
   FR_enc_count = FR.get_encoder_count();
   FL_enc_count = FL.get_encoder_count();
-  BR_enc_count = -1 * BR.get_encoder_count();
+  BR_enc_count = BR.get_encoder_count();
   BL_enc_count = BL.get_encoder_count();
   
-  FR_rpms = FR.get_motor_rpms();
-  FL_rpms = FL.get_motor_rpms();
-  BR_rpms = -1 * BR.get_motor_rpms();
-  BL_rpms = BL.get_motor_rpms();
+  FR_rpm = FR.get_motor_vel(); // pulse_per_turn;
+  FL_rpm = FL.get_motor_vel(); // pulse_per_turn;
+  BR_rpm = BR.get_motor_vel(); // pulse_per_turn;
+  BL_rpm = BL.get_motor_vel(); // pulse_per_turn;
   interrupts();
   
   previous_time = current_time;
