@@ -144,7 +144,7 @@ double Wheel::pos_pid(double target) {
   double error_derivative = (error - this->prev_pos_error) / dt;
   this->pos_error_integral += error * dt;
 
-  double output = this->pos_kd * error + this->pos_ki * this->pos_error_integral + this->pos_kd * error_derivative;
+  double output = this->pos_kp * error + this->pos_ki * this->pos_error_integral + this->pos_kd * error_derivative;
 
   this->prev_pos_time = current_time;
   this->prev_pos_error = error;
@@ -183,15 +183,15 @@ double Wheel::comp_pid(double target_vel_, double target_pos) {
   this->pos_error_integral += pos_error * dt;
   this->vel_error_integral += vel_error * dt;
 
-  this->pos_error_max = fmax(this->pos_error_max, pos_error);
+  this->pos_error_max = fmax(abs(this->pos_error_max), abs(pos_error));
 
-  double pos_output = this->pos_kd * pos_error + this->pos_ki * this->pos_error_integral + this->pos_kd * pos_error_derivative;
+  double pos_output = this->pos_kp * pos_error + this->pos_ki * this->pos_error_integral + this->pos_kd * pos_error_derivative;
   double vel_output = this->vel_kp * vel_error + this->vel_ki * this->vel_error_integral + this->vel_kd * vel_error_derivative;
 
   double pos_weight_base = 100;
   double pos_error_percent = fabs(pos_error) / this->pos_error_max; // Value domain: [0, 1]
-  double pos_weight = (pow(pos_weight_base, (pos_error_percent - 1)) - 1) / (pos_weight_base - 1); // Value domain: [~0, 1]
-  double vel_weight = 1 - pos_weight;
+  double vel_weight = (pow(pos_weight_base, pos_error_percent) - 1) / (pos_weight_base - 1); // Value domain: [~0, 1]
+  double pos_weight= 1 - vel_weight;
   
   double output = pos_output * pos_weight + vel_output * vel_weight;
 
