@@ -42,7 +42,9 @@ void loop() {
     }
   }
   
-  // plate.plate_command(Command::LINEAR_PWM, 120);
+  // plate.plate_command(Command::LINEAR_PWM, 255);
   // plate.plate_command(Command::LINEAR_POS, 2);
-  // plate.plate_command(Command::LINEAR_VEL, 0.4);
+  // plate.plate_command(Command::LINEAR_VEL, 0.5);
+  // plate.plate_command(Command::LINEAR_COMP, 5);
+  // plate.plate_command(Command::DEBUG, 0);
 }
