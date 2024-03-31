@@ -2,7 +2,7 @@
 #define PLATE_H
 
 #include "wheel.h"
-#include "arm.h"
+// #include "arm.h"
 #include "wheel_settings.h"
 #include <Plotter.h>
 
@@ -39,7 +39,7 @@ private:
   Wheel FL;
   Wheel BR;
   Wheel BL;
-  Arm arm;
+  // Arm arm;
   DEBUG debug;
   Plotter plotter;
 
