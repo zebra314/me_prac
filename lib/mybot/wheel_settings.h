@@ -15,11 +15,11 @@
 #define PULSE_PER_METER (PULSE_PER_TURN / (WHEEL_DIAMETER * PI))
 
 /* FRONT LEFT WHEEL */
-#define FL_dig_pin_1 38
-#define FL_dig_pin_2 36
-#define FL_pwm_pin   20
-#define FL_enc_pin_a 18
-#define FL_enc_pin_b 15
+#define FL_pwm_pin   11
+#define FL_dig_pin_1 51
+#define FL_dig_pin_2 49
+#define FL_enc_pin_a 2
+#define FL_enc_pin_b 4
 
 #define FL_pos_kp    2.7
 #define FL_pos_ki    0.04
@@ -29,12 +29,27 @@
 #define FL_vel_ki    0.04
 #define FL_vel_kd    0.8
 
+/* BACK LEFT WHEEL */
+#define BL_pwm_pin   10
+#define BL_dig_pin_1 45
+#define BL_dig_pin_2 47
+#define BL_enc_pin_a 3
+#define BL_enc_pin_b 5
+
+#define BL_pos_kp    2.7
+#define BL_pos_ki    0.04
+#define BL_pos_kd    0.8
+
+#define BL_vel_kp    2.7
+#define BL_vel_ki    6
+#define BL_vel_kd    0
+
 /* FRONT RIGHT WHEEL */
-#define FR_dig_pin_1 4
-#define FR_dig_pin_2 5
-#define FR_pwm_pin   6
-#define FR_enc_pin_a 2
-#define FR_enc_pin_b 7
+#define FR_pwm_pin   9
+#define FR_dig_pin_1 39
+#define FR_dig_pin_2 37
+#define FR_enc_pin_a 18
+#define FR_enc_pin_b 16
 
 #define FR_pos_kp    2.7
 #define FR_pos_ki    6
@@ -44,27 +59,12 @@
 #define FR_vel_ki    6
 #define FR_vel_kd    0
 
-/* BACK LEFT WHEEL */
-#define BL_dig_pin_1 12
-#define BL_dig_pin_2 13
-#define BL_pwm_pin   14
-#define BL_enc_pin_a 19
-#define BL_enc_pin_b 21
-
-#define BL_pos_kp    2.7
-#define BL_pos_ki    0.04
-#define BL_pos_kd    0.8
-
-#define BL_vel_kp    2.7
-#define BL_vel_ki    0.04
-#define BL_vel_kd    0.8
-
 /* BACK RIGHT WHEEL */
-#define BR_dig_pin_1 9
-#define BR_dig_pin_2 8
-#define BR_pwm_pin   10
-#define BR_enc_pin_a 3
-#define BR_enc_pin_b 11
+#define BR_pwm_pin   8
+#define BR_dig_pin_1 33
+#define BR_dig_pin_2 35
+#define BR_enc_pin_a 19
+#define BR_enc_pin_b 17
 
 #define BR_pos_kp    2.7
 #define BR_pos_ki    0.04
@@ -75,11 +75,11 @@
 #define BR_vel_kd    0.8
 
 /* ARM */
-#define ARM_pin_0    22
-#define ARM_pin_1    23
-#define ARM_pin_2    24
-#define ARM_pin_3    25
-#define ARM_pin_4    26
-#define ARM_pin_gripper 27
+// #define ARM_pin_0    
+// #define ARM_pin_1    
+// #define ARM_pin_2    
+// #define ARM_pin_3    
+// #define ARM_pin_4    
+// #define ARM_pin_gripper
 
 #endif // !SETTINGS_H
