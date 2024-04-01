@@ -42,10 +42,10 @@ graph TD;
 
 $$
 \begin{align*}
-\text{pos\_weight\_base} &= 100 \\
-\text{pos\_error\_percent} &= \frac{|\text{pos\_error}|}{\text{pos\_error\_max}} \quad \text{(Value domain: } [0, 1]) \\
-\text{vel\_weight} &= \frac{{\text{pos\_weight\_base}}^{\text{pos\_error\_percent}} - 1}{\text{pos\_weight\_base} - 1} \quad \text{(Value domain: } [0, 1]) \\
-\text{pos\_weight} &= 1 - \text{vel\_weight}
+\text{pos weight base} &= 100 \\
+\text{pos error percent} &= \frac{|\text{pos error}|}{\text{pos error max}} \quad \text{(Value domain: } [0, 1]) \\
+\text{vel weight} &= \frac{{\text{pos weight base}}^{\text{pos error percent}} - 1}{\text{pos weight base} - 1} \quad \text{(Value domain: } [0, 1]) \\
+\text{pos weight} &= 1 - \text{vel weight}
 \end{align*}
 $$
 
