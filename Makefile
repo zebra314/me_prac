@@ -23,6 +23,9 @@ upload:
 attach:
 	docker start platformio
 	docker attach platformio
+
+plot:
+	./arduino-plotter-listener-linux64/listener
 		
 clean:
 	docker stop platformio
