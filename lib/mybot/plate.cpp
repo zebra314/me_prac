@@ -99,7 +99,7 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
 
   case Command::LINEAR_COMP:
     target_pos = value_1 * PULSE_PER_METER; // pulses
-    target_vel = 0.5 * PULSE_PER_METER; // pulses per second
+    target_vel = value_2 * PULSE_PER_METER; // pulses per second
 
     FR.wheel_comp_ctrl(target_vel, target_pos);
     FL.wheel_comp_ctrl(target_vel, target_pos);
@@ -136,7 +136,7 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
 
   case Command::ANGULAR_COMP:
     target_pos = value_1 * PULSE_PER_METER; // pulses
-    target_vel = 0.5 * PULSE_PER_METER; // pulses per second
+    target_vel = value_2 * PULSE_PER_METER; // pulses per second
 
     FR.wheel_comp_ctrl(target_vel, target_pos);
     FL.wheel_comp_ctrl(-target_vel, target_pos);
