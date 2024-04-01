@@ -17,3 +17,25 @@ An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-
 
 ## Schematic
 
+## Usage
+
+It is recommended to use the docker image to compile the code, you can also use the platformio extension in vscode.
+
+For docker, you can use the following commands:
+To build the docker image
+
+```sh
+make install
+```
+
+To compile the code
+
+```sh
+make build
+```
+
+To upload the code to the arduino
+
+```sh
+make upload
+```
