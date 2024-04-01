@@ -63,7 +63,7 @@ void Plate::plate_get_serial_input() {
   pulse per meter = 550 / (wheel diameter * PI)
 */
 
-bool Plate::plate_command(Command command, double value) {
+bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 0) {
   // units: meter, radian, m/s, rad/s, pwm
   double target_pwm, target_pos, target_vel;
 
@@ -71,7 +71,7 @@ bool Plate::plate_command(Command command, double value) {
   switch (command) {
 
   case Command::LINEAR_PWM:
-    target_pwm = value;
+    target_pwm = value_1;
 
     FR.wheel_pwm_ctrl(target_pwm);
     FL.wheel_pwm_ctrl(target_pwm);
@@ -80,7 +80,7 @@ bool Plate::plate_command(Command command, double value) {
     break;
 
   case Command::LINEAR_POS:
-    target_pos = value * PULSE_PER_METER; // pulses
+    target_pos = value_1 * PULSE_PER_METER; // pulses
     
     FR.wheel_pos_ctrl(target_pos);
     FL.wheel_pos_ctrl(target_pos);
@@ -89,7 +89,7 @@ bool Plate::plate_command(Command command, double value) {
     break;
 
   case Command::LINEAR_VEL:
-    target_vel = value * PULSE_PER_METER; // pulses per second
+    target_vel = value_1 * PULSE_PER_METER; // pulses per second
 
     FR.wheel_vel_ctrl(target_vel);
     FL.wheel_vel_ctrl(target_vel);
@@ -98,7 +98,7 @@ bool Plate::plate_command(Command command, double value) {
     break;
 
   case Command::LINEAR_COMP:
-    target_pos = value * PULSE_PER_METER; // pulses
+    target_pos = value_1 * PULSE_PER_METER; // pulses
     target_vel = 0.5 * PULSE_PER_METER; // pulses per second
 
     FR.wheel_comp_ctrl(target_vel, target_pos);
@@ -108,7 +108,7 @@ bool Plate::plate_command(Command command, double value) {
     break;
 
   case Command::ANGULAR_PWM:
-    target_pwm = value;
+    target_pwm = value_1;
 
     FR.wheel_pwm_ctrl(target_pwm);
     FL.wheel_pwm_ctrl(-target_pwm);
@@ -117,7 +117,7 @@ bool Plate::plate_command(Command command, double value) {
     break;
     
   case Command::ANGULAR_POS:
-    target_pos = value * PULSE_PER_METER; // pulses
+    target_pos = value_1 * PULSE_PER_METER; // pulses
 
     FR.wheel_pos_ctrl(target_pos);
     FL.wheel_pos_ctrl(-target_pos);
@@ -126,7 +126,7 @@ bool Plate::plate_command(Command command, double value) {
     break;
 
   case Command::ANGULAR_VEL:
-    target_vel = value * PULSE_PER_METER; // pulses per second
+    target_vel = value_1 * PULSE_PER_METER; // pulses per second
 
     FR.wheel_vel_ctrl(target_vel);
     FL.wheel_vel_ctrl(-target_vel);
@@ -135,7 +135,7 @@ bool Plate::plate_command(Command command, double value) {
     break;
 
   case Command::ANGULAR_COMP:
-    target_pos = value * PULSE_PER_METER; // pulses
+    target_pos = value_1 * PULSE_PER_METER; // pulses
     target_vel = 0.5 * PULSE_PER_METER; // pulses per second
 
     FR.wheel_comp_ctrl(target_vel, target_pos);

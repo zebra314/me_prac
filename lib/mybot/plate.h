@@ -61,7 +61,7 @@ private:
   void plate_update_state();
 
 public:
-  Plate(DEBUG debug);
+  Plate(DEBUG debug = DEBUG::NONE);
   ~Plate();
 
   int serial_input;
@@ -75,7 +75,7 @@ public:
 
   /* BASIC */
   void plate_connect();
-  bool plate_command(Command command, double value);
+  bool plate_command(Command command, double value_1 = 0, double value_2 = 0);
   void plate_rest_enc();
   void plate_get_serial_input();
 };

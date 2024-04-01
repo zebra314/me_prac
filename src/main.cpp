@@ -46,5 +46,5 @@ void loop() {
   // plate.plate_command(Command::LINEAR_POS, 2);
   // plate.plate_command(Command::LINEAR_VEL, 0.5);
   // plate.plate_command(Command::LINEAR_COMP, 5);
-  // plate.plate_command(Command::DEBUG, 0);
+  // plate.plate_command(Command::DEBUG);
 }
