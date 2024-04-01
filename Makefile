@@ -1,9 +1,16 @@
 install:
 	docker build -t platformio:latest .
-	docker run -it --name platformio \
+
+	@USB_DEVICE=$$(ls /dev/ttyUSB* /dev/ttyACM* 2>/dev/null | head -n 1); \
+	if [ -z "$$USB_DEVICE" ]; then \
+		echo "No USB device found"; \
+	else \
+		docker create -it --name platformio \
     --mount type=bind,source="$(shell pwd)",target=/me_prac \
 		-w /me_prac \
-		platformio:latest \
+		--device $$USB_DEVICE \
+		platformio:latest; \
+	fi
 
 build:
 	docker start platformio
@@ -17,3 +24,7 @@ attach:
 	docker start platformio
 	docker attach platformio
 		
+clean:
+	docker stop platformio
+	docker rm platformio
+	docker rmi platformio:latest
