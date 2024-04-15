@@ -66,6 +66,8 @@ void Plate::plate_get_serial_input() {
 bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 0) {
   // units: meter, radian, m/s, rad/s, pwm
   double target_pwm, target_pos, target_vel;
+  double brake_pulses;
+  double pos_percent = 0;
 
   plate_update_state();
   switch (command) {
@@ -81,11 +83,38 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
 
   case Command::LINEAR_POS:
     target_pos = value_1 * PULSE_PER_METER; // pulses
-    
-    FR.wheel_pos_ctrl(target_pos);
-    FL.wheel_pos_ctrl(target_pos);
-    BR.wheel_pos_ctrl(target_pos);
-    BL.wheel_pos_ctrl(target_pos);
+    brake_pulses = 30;
+    plate_command(Command::RESET);
+
+    while(true) {
+      plate_update_state();
+
+      pos_percent = (FR_enc_count + FL_enc_count + BR_enc_count + BL_enc_count) / 4.0 / target_pos; 
+      
+      Serial.print("pos_percent: ");
+      Serial.print(pos_percent);
+      Serial.print(" brake_pulses: ");
+      Serial.println(brake_pulses);
+     
+      FR.wheel_pos_ctrl(target_pos);
+      FL.wheel_pos_ctrl(target_pos);
+      BR.wheel_pos_ctrl(target_pos);
+      BL.wheel_pos_ctrl(target_pos);
+
+      // Brake if error is small
+      if(pos_percent > 0.98) {
+        brake_pulses--;
+      }
+      
+      // Exit if arrive target and brake_pulses is 0
+      if (brake_pulses <= 0) {
+        break;
+      }
+    }
+
+    plate_command(Command::PAUSE);
+    plate_command(Command::RESET);
+
     break;
 
   case Command::LINEAR_VEL:
@@ -100,11 +129,27 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
   case Command::LINEAR_COMP:
     target_pos = value_1 * PULSE_PER_METER; // pulses
     target_vel = value_2 * PULSE_PER_METER; // pulses per second
+    
+    // while(true) {
+    //   FR.wheel_comp_ctrl(target_vel, target_pos);
+    //   FL.wheel_comp_ctrl(target_vel, target_pos);
+    //   BR.wheel_comp_ctrl(target_vel, target_pos);
+    //   BL.wheel_comp_ctrl(target_vel, target_pos);
 
-    FR.wheel_comp_ctrl(target_vel, target_pos);
-    FL.wheel_comp_ctrl(target_vel, target_pos);
-    BR.wheel_comp_ctrl(target_vel, target_pos);
-    BL.wheel_comp_ctrl(target_vel, target_pos);
+    //   // Brake if error is small
+    //   if(plate_get_pos_error_percent() < 0.05) {
+    //     brake_pulses--;
+    //   }
+
+    //   // Exit if arrive target and brake_pulses is 0
+    //   if(brake_pulses == 0 && plate_get_pos_error_percent() < 0.05) {
+    //     break;
+    //   }
+    // }
+
+    plate_command(Command::PAUSE);
+    plate_command(Command::RESET);
+
     break;
 
   case Command::ANGULAR_PWM:

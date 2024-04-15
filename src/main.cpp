@@ -12,6 +12,8 @@ void setup() {
   BlueTooth_setup();
 }
 
+bool executed = false;
+
 void loop() {
   // Read the bluetooth signal and translate it to command
   if(BlueTooth_read(&rcv)){
@@ -45,6 +47,9 @@ void loop() {
   // plate.plate_command(Command::LINEAR_PWM, 255);
   // plate.plate_command(Command::LINEAR_POS, 2);
   // plate.plate_command(Command::LINEAR_VEL, 0.5);
-  // plate.plate_command(Command::LINEAR_COMP, 5, 0.5);
-  // plate.plate_command(Command::DEBUG);
+
+  // if (!executed) {
+  //   plate.plate_command(Command::LINEAR_POS, 2);
+  //   executed = true;
+  // }
 }
