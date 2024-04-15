@@ -52,8 +52,8 @@
 #define FR_enc_pin_b 16
 
 #define FR_pos_kp    2.7
-#define FR_pos_ki    6
-#define FR_pos_kd    0
+#define FR_pos_ki    0.04
+#define FR_pos_kd    0.8
 
 #define FR_vel_kp    2.7
 #define FR_vel_ki    6
