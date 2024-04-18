@@ -34,7 +34,7 @@ void loop() {
     case '3':
       plate.plate_command(Command::ANGULAR_PWM, -120);
       break;
-    
+
     case '4':
       plate.plate_command(Command::PAUSE, 0);
       break;
@@ -43,13 +43,13 @@ void loop() {
       break;
     }
   }
-  
-  // plate.plate_command(Command::LINEAR_PWM, 255);
-  // plate.plate_command(Command::LINEAR_POS, 2);
-  // plate.plate_command(Command::LINEAR_VEL, 0.5);
 
-  // if (!executed) {
-  //   plate.plate_command(Command::LINEAR_POS, 2);
-  //   executed = true;
-  // }
+  if (!executed) {
+    plate.plate_command(Command::LINEAR_POS, 2);
+    plate.plate_command(Command::ANGULAR_POS, 0.5);
+    plate.plate_command(Command::LINEAR_POS, 1);
+    plate.plate_command(Command::ANGULAR_POS, 0.5);
+    plate.plate_command(Command::LINEAR_POS, 2);
+    executed = true;
+  }
 }
