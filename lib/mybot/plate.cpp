@@ -163,7 +163,9 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
 
     while(true) {
       plate_update_state();
-      pos_percent = abs(FR_enc_count - FL_enc_count + BR_enc_count - BL_enc_count) / 4.0 / target_pos; 
+      pos_percent = abs(BR_enc_count - BL_enc_count) / abs(target_pos); 
+      
+      Serial.println(pos_percent);
 
       FR.wheel_pos_ctrl(target_pos);
       FL.wheel_pos_ctrl(-target_pos);
@@ -171,7 +173,7 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
       BL.wheel_pos_ctrl(-target_pos);
 
       // Brake if error is small
-      if(pos_percent > 0.98) {
+      if(pos_percent > 0.90) {
         brake_pulses--;
       }
 

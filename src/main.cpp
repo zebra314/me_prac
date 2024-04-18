@@ -5,7 +5,7 @@
 // BT param
 char rcv = 0x04;
 
-Plate plate(DEBUG::NONE);
+Plate plate(DEBUG::TEXT);
 
 void setup() {
   plate.plate_connect();
@@ -45,11 +45,35 @@ void loop() {
   }
 
   if (!executed) {
-    plate.plate_command(Command::LINEAR_POS, 2);
-    plate.plate_command(Command::ANGULAR_POS, 0.5);
-    plate.plate_command(Command::LINEAR_POS, 1);
-    plate.plate_command(Command::ANGULAR_POS, 0.5);
-    plate.plate_command(Command::LINEAR_POS, 2);
+    plate.plate_command(Command::LINEAR_POS, -0.8);
+    delay(80);
+
+    // Flash Corner
+    plate.plate_command(Command::ANGULAR_POS, -0.17);
+    delay(80);
+
+    plate.plate_command(Command::LINEAR_POS, -0.75);
+    delay(80);
+
+    plate.plate_command(Command::ANGULAR_POS, 0.23);
+    delay(80);
+
+    plate.plate_command(Command::LINEAR_POS, -0.75);
+    delay(80);
+
+    plate.plate_command(Command::ANGULAR_POS, -0.145);
+    delay(80);
+
+    // 90 deg Corner
+    plate.plate_command(Command::LINEAR_POS, -0.52);
+    delay(80);
+
+    plate.plate_command(Command::ANGULAR_POS, 0.33);
+    delay(80);
+
+    plate.plate_command(Command::LINEAR_POS, -0.4);
+    delay(80);
+
     executed = true;
   }
 }
