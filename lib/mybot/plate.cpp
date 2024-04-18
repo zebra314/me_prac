@@ -88,13 +88,7 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
 
     while(true) {
       plate_update_state();
-
       pos_percent = (FR_enc_count + FL_enc_count + BR_enc_count + BL_enc_count) / 4.0 / target_pos; 
-      
-      Serial.print("pos_percent: ");
-      Serial.print(pos_percent);
-      Serial.print(" brake_pulses: ");
-      Serial.println(brake_pulses);
      
       FR.wheel_pos_ctrl(target_pos);
       FL.wheel_pos_ctrl(target_pos);
@@ -163,11 +157,33 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
     
   case Command::ANGULAR_POS:
     target_pos = value_1 * PULSE_PER_METER; // pulses
+    brake_pulses = 30;
 
-    FR.wheel_pos_ctrl(target_pos);
-    FL.wheel_pos_ctrl(-target_pos);
-    BR.wheel_pos_ctrl(target_pos);
-    BL.wheel_pos_ctrl(-target_pos);
+    plate_command(Command::RESET);
+
+    while(true) {
+      plate_update_state();
+      pos_percent = abs(FR_enc_count - FL_enc_count + BR_enc_count - BL_enc_count) / 4.0 / target_pos; 
+
+      FR.wheel_pos_ctrl(target_pos);
+      FL.wheel_pos_ctrl(-target_pos);
+      BR.wheel_pos_ctrl(target_pos);
+      BL.wheel_pos_ctrl(-target_pos);
+
+      // Brake if error is small
+      if(pos_percent > 0.98) {
+        brake_pulses--;
+      }
+
+      // Exit if arrive target and brake_pulses is 0
+      if (brake_pulses <= 0) {
+        break;
+      }
+    }
+
+    plate_command(Command::PAUSE);
+    plate_command(Command::RESET);
+
     break;
 
   case Command::ANGULAR_VEL:
