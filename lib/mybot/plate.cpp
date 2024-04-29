@@ -53,6 +53,37 @@ void Plate::plate_get_serial_input() {
   }
 }
 
+void Plate::plate_before_take_ball() {
+  plate_command(Command::LINEAR_POS, -0.8);
+  delay(80);
+
+  // Flash Corner
+  plate_command(Command::ANGULAR_POS, -0.17);
+  delay(80);
+
+  plate_command(Command::LINEAR_POS, -0.75);
+  delay(80);
+
+  plate_command(Command::ANGULAR_POS, 0.23);
+  delay(80);
+
+  plate_command(Command::LINEAR_POS, -0.75);
+  delay(80);
+
+  plate_command(Command::ANGULAR_POS, -0.145);
+  delay(80);
+
+  // 90 deg Corner
+  plate_command(Command::LINEAR_POS, -0.52);
+  delay(80);
+
+  plate_command(Command::ANGULAR_POS, 0.33);
+  delay(80);
+
+  plate_command(Command::LINEAR_POS, -0.4);
+  delay(80);
+}
+
 /* Encoder pulse output per revolution 
   = Basic pulse x gear ratio
 

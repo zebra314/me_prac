@@ -68,7 +68,7 @@ public:
   int serial_buffer;
 
   /* GAME */
-  // bool plate_before_take_ball();
+  void plate_before_take_ball();
   // bool plate_take_ball();
   // bool plate_release_ball();
   // void plate_manual();
