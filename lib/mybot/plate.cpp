@@ -180,8 +180,8 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
   case Command::ANGULAR_PWM:
     target_pwm = value_1;
 
-    FR.wheel_pwm_ctrl(target_pwm);
-    FL.wheel_pwm_ctrl(-target_pwm);
+    FR.wheel_pwm_ctrl(target_pwm * 0.65);
+    FL.wheel_pwm_ctrl(-target_pwm * 0.65);
     BR.wheel_pwm_ctrl(target_pwm);
     BL.wheel_pwm_ctrl(-target_pwm);
     break;

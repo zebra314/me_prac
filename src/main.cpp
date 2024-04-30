@@ -28,11 +28,11 @@ void loop() {
       break;
 
     case '2':
-      plate.plate_command(Command::ANGULAR_PWM, 120);
+      plate.plate_command(Command::ANGULAR_PWM, 200);
       break;
 
     case '3':
-      plate.plate_command(Command::ANGULAR_PWM, -120);
+      plate.plate_command(Command::ANGULAR_PWM, -200);
       break;
 
     case '4':
