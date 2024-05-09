@@ -17,3 +17,10 @@ typedef enum bluetooth
     ARM_FASTER = 0x2a,
     ARM_SLOWER = 0x2b,
 } bluetooth_t;
+
+typedef struct 
+{
+    int cmd; // one byte 
+    int value; // one byte , from zero to ten
+}bluetooth_cmd_t;
+
