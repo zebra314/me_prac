@@ -75,9 +75,19 @@
 #define BR_vel_kd    0.8
 
 /* ARM */
-#define ARM_pin_0 22
-#define ARM_pin_1 24
-#define ARM_pin_2 26
-#define ARM_pin_3 28
+#define SERVO_1_pin 22
+#define SERVO_2_pin 24
+#define SERVO_3_pin 26
+#define SERVO_4_pin 28
+
+/* ARM LIMITs*/
+#define SERVO_1_upper 175
+#define SERVO_1_lower 0
+#define SERVO_2_upper 180
+#define SERVO_2_lower 0
+#define SERVO_3_upper 180
+#define SERVO_3_lower 0
+#define SERVO_4_upper 180
+#define SERVO_4_lower 0
 
 #endif // !SETTINGS_H
