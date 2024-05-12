@@ -75,11 +75,9 @@
 #define BR_vel_kd    0.8
 
 /* ARM */
-// #define ARM_pin_0    
-// #define ARM_pin_1    
-// #define ARM_pin_2    
-// #define ARM_pin_3    
-// #define ARM_pin_4    
-// #define ARM_pin_gripper
+#define ARM_pin_0 22
+#define ARM_pin_1 24
+#define ARM_pin_2 26
+#define ARM_pin_3 28
 
 #endif // !SETTINGS_H

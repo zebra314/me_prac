@@ -24,7 +24,7 @@ public:
   Arm();
   ~Arm();
 
-  void arm_connect(byte servo_0_pin, byte servo_1_pin, byte servo_2_pin, byte servo_3_pin, byte servo_4_pin, byte servo_gripper_pin);
+  void arm_connect(byte servo_0_pin, byte servo_1_pin, byte servo_2_pin, byte servo_3_pin);
   void arm_iso_ctrl(int plate_num, int deg);
 };
 

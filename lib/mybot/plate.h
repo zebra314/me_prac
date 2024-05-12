@@ -2,7 +2,7 @@
 #define PLATE_H
 
 #include "wheel.h"
-// #include "arm.h"
+#include "arm.h"
 #include "wheel_settings.h"
 #include <Plotter.h>
 
@@ -78,6 +78,8 @@ public:
   bool plate_command(Command command, double value_1 = 0, double value_2 = 0);
   void plate_rest_enc();
   void plate_get_serial_input();
+
+  Arm arm;
 };
 
 #endif // !PLATE_H
