@@ -1,15 +1,19 @@
 #include <Arduino.h>
 #include "plate.h"
+#include "arm.h"
 #include "blueTooth.cpp"
 
 // BT param
 char rcv = 0x04;
 
 Plate plate(DEBUG::TEXT);
+Arm arm;
 
 void setup() {
-  plate.plate_connect();
   BlueTooth_setup();
+  plate.plate_connect();
+  arm.arm_connect();
+  arm.arm_zero();
 }
 
 bool executed = false;

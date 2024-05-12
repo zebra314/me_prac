@@ -3,7 +3,7 @@
 
 #include "wheel.h"
 #include "arm.h"
-#include "wheel_settings.h"
+#include "settings.h"
 #include <Plotter.h>
 
 enum class Command:char {
@@ -39,7 +39,6 @@ private:
   Wheel FL;
   Wheel BR;
   Wheel BL;
-  // Arm arm;
   DEBUG debug;
   Plotter plotter;
 
@@ -69,8 +68,6 @@ public:
 
   /* GAME */
   void plate_before_take_ball();
-  // bool plate_take_ball();
-  // bool plate_release_ball();
   // void plate_manual();
 
   /* BASIC */
