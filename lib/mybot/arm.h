@@ -2,32 +2,43 @@
 #define ARM_H
 
 #include <Arduino.h>
+#include <Arduino_FreeRTOS.h>
 #include <Servo.h>
+#include "settings.h"
+
+enum class ARM_POS:char {
+  ZERO,
+  PRE_TAKE_BALL,
+  TAKE_BALL,
+  DROP_BALL,
+};
+
+struct ext_servo {
+  Servo servo;
+  int target_deg;
+  int current_deg;
+  int ms_delay;
+  int upper_limit;
+  int lower_limit;
+};
 
 class Arm {
 private:
-  byte servo_0_pin;
-  byte servo_1_pin;
-  byte servo_2_pin;
-  byte servo_3_pin;
-  byte servo_4_pin;
-  byte servo_gripper_pin;
+  ext_servo servo_1;
+  ext_servo servo_2;
+  ext_servo servo_3;
+  ext_servo servo_4;
 
-  Servo servo_0;
-  Servo servo_1;
-  Servo servo_2;
-  Servo servo_3;
-  Servo servo_4;
-  Servo servo_gripper;
+  void arm_update_pos();
 
 public:
   Arm();
   ~Arm();
 
-  void arm_connect(byte servo_0_pin, byte servo_1_pin, byte servo_2_pin, byte servo_3_pin);
-  void arm_iso_ctrl(int plate_num, int deg);
+  void arm_connect();
+  void arm_zero();
+  void arm_iso_ctrl(int servo_num, int deg);
+  void arm_set_pos(ARM_POS pos);
 };
-
-
 
 #endif // !ARM_H
