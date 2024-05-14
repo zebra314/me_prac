@@ -31,15 +31,16 @@ void Arm::arm_zero() {
 }
 
 void Arm::arm_iso_ctrl(int servo_num, int deg) {
+  if(deg > 180) deg = 180;
+  if(deg < 0) deg = 0;
+  
   switch (servo_num) {
   case 1:
-    if (deg > this->servo_1.upper_limit || deg < this->servo_1.lower_limit) return; 
     this->servo_1.servo.write(deg);
     this->servo_1.current_deg = deg;
     break;
 
   case 2:
-    if (deg > this->servo_2.upper_limit || deg < this->servo_2.lower_limit) return;
     this->servo_2.servo.write(deg);
     this->servo_2.current_deg = deg;
     break;
@@ -84,7 +85,7 @@ void Arm::arm_update_pos() {
     if (servo_1.target_deg == servo_1.current_deg && servo_2.target_deg == servo_2.current_deg) {
       break;
     }
-    Serial.print(servo_1.current_deg);Serial.print(" ");Serial.println(servo_2.current_deg);
+    // Serial.print(servo_1.current_deg);Serial.print(" ");Serial.println(servo_2.current_deg);
 
     if (servo_1.target_deg > servo_1.current_deg) {
       servo_1.current_deg++;

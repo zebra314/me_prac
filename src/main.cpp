@@ -64,29 +64,29 @@ void loop() {
       break;
 
     case 33:
-      servo_1_deg +=5;
+      servo_1_deg +=7;
       if (servo_1_deg > 180) servo_1_deg = 180;
       arm.arm_iso_ctrl(1, servo_1_deg);
       break;
     
     case 34:
-      servo_1_deg -=5;
+      servo_1_deg -=7;
       if (servo_1_deg < 0) servo_1_deg = 0;
       arm.arm_iso_ctrl(1, servo_1_deg);
       break;
     
     case 35:
-      Serial.println("Servo 2 +");
-      servo_2_deg +=5;
+      servo_2_deg +=7;
       if (servo_2_deg > 180) servo_2_deg = 180;
       arm.arm_iso_ctrl(2, servo_2_deg);
+      Serial.println(servo_2_deg);
       break;
     
     case 36:
-      Serial.println("Servo 2 -");
-      servo_2_deg -=5;
+      servo_2_deg -=7;
       if (servo_2_deg < 0) servo_2_deg = 0;
       arm.arm_iso_ctrl(2, servo_2_deg);
+      Serial.println(servo_2_deg);
       break;
     case 37:
       arm.arm_set_pos(ARM_POS::ZERO);
