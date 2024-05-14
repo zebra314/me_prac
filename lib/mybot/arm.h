@@ -26,8 +26,6 @@ class Arm {
 private:
   ext_servo servo_1;
   ext_servo servo_2;
-  ext_servo servo_3;
-  ext_servo servo_4;
 
   void arm_update_pos();
 

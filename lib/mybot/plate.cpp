@@ -34,7 +34,7 @@ void Plate::plate_connect() {
     plotter.AddTimeGraph("Motor position", 5000, "FR", FR_enc_count, "BR", BR_enc_count);
     plotter.AddTimeGraph("Motor rpm", 5000, "FR", FR_rpm, "BR", BR_rpm);
   } else if(debug == DEBUG::TEXT) {
-    Serial.begin(9600);
+    // Serial.begin(9600);
   }
 }
 
