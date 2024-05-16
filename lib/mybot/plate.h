@@ -76,7 +76,6 @@ public:
   void plate_rest_enc();
   void plate_get_serial_input();
 
-  Arm arm;
 };
 
 #endif // !PLATE_H

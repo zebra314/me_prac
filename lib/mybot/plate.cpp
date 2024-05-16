@@ -33,8 +33,6 @@ void Plate::plate_connect() {
     plotter.Begin();
     plotter.AddTimeGraph("Motor position", 5000, "FR", FR_enc_count, "BR", BR_enc_count);
     plotter.AddTimeGraph("Motor rpm", 5000, "FR", FR_rpm, "BR", BR_rpm);
-  } else if(debug == DEBUG::TEXT) {
-    // Serial.begin(9600);
   }
 }
 
@@ -195,8 +193,6 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
       plate_update_state();
       pos_percent = abs(BR_enc_count - BL_enc_count) / abs(target_pos); 
       
-      Serial.println(pos_percent);
-
       FR.wheel_pos_ctrl(target_pos);
       FL.wheel_pos_ctrl(-target_pos);
       BR.wheel_pos_ctrl(target_pos);
@@ -278,6 +274,10 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
 // }
 
 void Plate::plate_print_info() {
+  if (!Serial.available()) {
+    return;
+  }
+
   // Print every 0.1 second
   if(current_time - print_time_flag < 20000) {
     return;
