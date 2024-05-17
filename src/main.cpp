@@ -18,15 +18,9 @@ void setup() {
 
   arm.arm_connect();
   arm.arm_zero();
-
-  Serial.println("Setup done");
 }
 
 bool executed = false;
-
-// tmp
-int servo_1_deg = 70;
-int servo_2_deg = 180;
 
 void loop() {
 
@@ -44,11 +38,11 @@ void loop() {
     switch (rcv)
     {
     case 16:
-      plate.plate_command(Command::LINEAR_PWM, 120);
+      plate.plate_command(Command::LINEAR_PWM, 200);
       break;
 
     case 17:
-      plate.plate_command(Command::LINEAR_PWM, -120);
+      plate.plate_command(Command::LINEAR_PWM, -200);
       break;
 
     case 18:
@@ -64,44 +58,27 @@ void loop() {
       break;
 
     case 33:
-      servo_1_deg +=7;
-      if (servo_1_deg > 180) servo_1_deg = 180;
-      arm.arm_iso_ctrl(1, servo_1_deg);
       break;
     
     case 34:
-      servo_1_deg -=7;
-      if (servo_1_deg < 0) servo_1_deg = 0;
-      arm.arm_iso_ctrl(1, servo_1_deg);
       break;
     
     case 35:
-      servo_2_deg +=7;
-      if (servo_2_deg > 180) servo_2_deg = 180;
-      arm.arm_iso_ctrl(2, servo_2_deg);
-      Serial.println(servo_2_deg);
       break;
     
     case 36:
-      servo_2_deg -=7;
-      if (servo_2_deg < 0) servo_2_deg = 0;
-      arm.arm_iso_ctrl(2, servo_2_deg);
-      Serial.println(servo_2_deg);
       break;
+
     case 37:
-      arm.arm_set_pos(ARM_POS::ZERO);
       break;
     
     case 38:
-      arm.arm_set_pos(ARM_POS::PRE_TAKE_BALL);
       break;
     
     case 39:
-      arm.arm_set_pos(ARM_POS::TAKE_BALL);
       break;
     
     case 40:
-      arm.arm_set_pos(ARM_POS::DROP_BALL);
       break;
     
     default:
