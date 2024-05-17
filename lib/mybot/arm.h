@@ -2,8 +2,8 @@
 #define ARM_H
 
 #include <Arduino.h>
-#include <Arduino_FreeRTOS.h>
 #include <Servo.h>
+#include "ext_servo.h"
 #include "settings.h"
 
 enum class ARM_POS:char {
@@ -13,19 +13,11 @@ enum class ARM_POS:char {
   DROP_BALL,
 };
 
-struct ext_servo {
-  Servo servo;
-  int target_deg;
-  int current_deg;
-  int ms_delay;
-  int upper_limit;
-  int lower_limit;
-};
-
 class Arm {
 private:
-  ext_servo servo_1;
-  ext_servo servo_2;
+  ExtServo base_r;
+  ExtServo base_l;
+  ExtServo upper;
 
   void arm_update_pos();
 
@@ -35,7 +27,7 @@ public:
 
   void arm_connect();
   void arm_zero();
-  void arm_iso_ctrl(int servo_num, int deg);
+  void arm_iso_ctrl(int servo_num, int deg, int ms_delay = 0);
   void arm_set_pos(ARM_POS pos);
 };
 
