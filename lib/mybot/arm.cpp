@@ -9,9 +9,9 @@ Arm::~Arm() {
 }
 
 void Arm::arm_connect() {
-  base_l.ext_servo_connect(22, 0, 0, 180);
-  base_r.ext_servo_connect(24, 0, 0, 180);
-  upper.ext_servo_connect(26, 0, 0, 180);
+  base_l.ext_servo_connect(SERVO_base_l_pin, SERVO_base_l_init, SERVO_base_l_min, SERVO_base_l_max);
+  base_r.ext_servo_connect(SERVO_base_r_pin, SERVO_base_r_init, SERVO_base_r_min, SERVO_base_r_max);
+  upper.ext_servo_connect(SERVO_upper_pin, SERVO_upper_init, SERVO_upper_min, SERVO_upper_max);
 }
 
 void Arm::arm_zero() {
