@@ -2,7 +2,6 @@
 #define ARM_H
 
 #include <Arduino.h>
-#include <Servo.h>
 #include "ext_servo.h"
 #include "settings.h"
 
