@@ -29,7 +29,7 @@ void Plate::plate_connect() {
   BR.wheel_connect(BR_dig_pin_1, BR_dig_pin_2, BR_pwm_pin, BR_enc_pin_a, BR_enc_pin_b, BR_pos_kp, BR_pos_ki, BR_pos_kd, FL_vel_kp, FL_vel_ki, FL_vel_kd);
   BL.wheel_connect(BL_dig_pin_1, BL_dig_pin_2, BL_pwm_pin, BL_enc_pin_a, BL_enc_pin_b, BL_pos_kp, BL_pos_ki, BL_pos_kd, FL_vel_kp, FL_vel_ki, FL_vel_kd);
 
-  if(debug == DEBUG::PLOT) {
+  if(debug == DEBUG::PLOT && !(Serial.available())) {
     plotter.Begin();
     plotter.AddTimeGraph("Motor position", 5000, "FR", FR_enc_count, "BR", BR_enc_count);
     plotter.AddTimeGraph("Motor rpm", 5000, "FR", FR_rpm, "BR", BR_rpm);

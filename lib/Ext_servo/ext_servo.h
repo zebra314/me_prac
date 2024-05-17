@@ -8,7 +8,6 @@
 
 class ExtServo {
 private:
-  Servo servo;
   TaskHandle_t taskHandle;
 
   int attach_pin;
@@ -21,6 +20,8 @@ private:
 public:
   ExtServo();
   ~ExtServo();
+
+  Servo servo;
 
   int target_deg;
   int current_deg;
