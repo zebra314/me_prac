@@ -39,6 +39,7 @@ void Arm::arm_iso_ctrl(int servo_num, int deg, int ms_delay) {
   }
 
 }
+
 void Arm::arm_set_pos(ARM_POS pos) {
   switch (pos) {
   case ARM_POS::ZERO:
