@@ -21,6 +21,7 @@ void setup() {
 }
 
 bool executed = false;
+double last_time = millis();
 
 void loop() {
 
@@ -32,6 +33,10 @@ void loop() {
     // executed = true;
   }
 
+  if(millis() - last_time > 150 ){
+    plate.plate_command(Command::PAUSE, 0);
+  }
+
   // Read the bluetooth signal and translate it to command
   if(BlueTooth_read(&rcv, &vel)){
     // Serial.print(rcv); Serial.print(" "); Serial.println(vel);
@@ -39,22 +44,27 @@ void loop() {
     {
     case 16:
       plate.plate_command(Command::LINEAR_PWM, 200);
+      last_time = millis();
       break;
 
     case 17:
       plate.plate_command(Command::LINEAR_PWM, -200);
+      last_time = millis();
       break;
 
     case 18:
       plate.plate_command(Command::ANGULAR_PWM, 200);
+      last_time = millis();
       break;
 
     case 19:
       plate.plate_command(Command::ANGULAR_PWM, -200);
+      last_time = millis();
       break;
 
     case 20:
       plate.plate_command(Command::PAUSE, 0);
+      last_time = millis();
       break;
 
     case 33:
