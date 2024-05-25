@@ -12,12 +12,9 @@ Arm arm;
 
 void setup() {
   Serial.begin(9600);
-
   BlueTooth_setup();
   plate.plate_connect();
-
   arm.arm_connect();
-  arm.arm_zero();
 }
 
 bool executed = false;
