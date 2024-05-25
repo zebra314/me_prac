@@ -12,17 +12,32 @@ ExtServo* ext_servo_list[53] = {nullptr}; // 53 is the biggest number of externa
 template <int attach_pin>
 static void ext_servo_handler(void* pvParameters) {
   while (true) {
+    // Check the if archieved the target deg
     if (ext_servo_list[attach_pin]->current_deg == ext_servo_list[attach_pin]->target_deg) {
       // vTaskSuspend(NULL); // This will casusing the servo to shake when the task is suspended
       continue; 
-    } else if (ext_servo_list[attach_pin]->current_deg < ext_servo_list[attach_pin]->target_deg) {
+    }
+
+    // Check the target deg limit
+    if (ext_servo_list[attach_pin]->target_deg > ext_servo_list[attach_pin]->upper_limit) {
+      ext_servo_list[attach_pin]->target_deg = ext_servo_list[attach_pin]->upper_limit;
+    } else if (ext_servo_list[attach_pin]->current_deg < ext_servo_list[attach_pin]->lower_limit) {
+      ext_servo_list[attach_pin]->target_deg = ext_servo_list[attach_pin]->lower_limit;
+    }
+
+    // Determine the direction of the servo
+    if (ext_servo_list[attach_pin]->current_deg < ext_servo_list[attach_pin]->target_deg) {
       ext_servo_list[attach_pin]->current_deg++;
     } else if (ext_servo_list[attach_pin]->current_deg > ext_servo_list[attach_pin]->target_deg) {
       ext_servo_list[attach_pin]->current_deg--;
     }
 
+    // Actuate the servo
     ext_servo_list[attach_pin]->servo.write(ext_servo_list[attach_pin]->current_deg);
     vTaskDelay(ext_servo_list[attach_pin]->ms_delay / portTICK_PERIOD_MS);
+
+    // Debug msg
+    ext_servo_list[attach_pin]->ext_servo_show_pos();
   }
   vTaskDelete(NULL);
 }
@@ -60,16 +75,6 @@ void ExtServo::ext_servo_zero() {
   this->servo.write(this->init_deg);
   this->current_deg = this->init_deg;
   this->target_deg = this->init_deg;
-}
-
-void ExtServo::ext_servo_set(int deg, int ms_delay) {
-  if (deg > this->upper_limit) deg = this->upper_limit;
-  if (deg < this->lower_limit) deg = this->lower_limit;
-
-  this->target_deg = deg;
-  this->ms_delay = ms_delay;
-
-  vTaskResume(this->taskHandle);
 }
 
 void ExtServo::ext_servo_show_task_state() {

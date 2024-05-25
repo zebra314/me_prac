@@ -30,7 +30,7 @@ void mybot_on() {
   xTaskCreate(
     mybot_task,
     "mybot_task",
-    500,
+    1000,
     NULL,
     1,
     NULL
@@ -77,15 +77,19 @@ static void mybot_task(void* pvParameters) {
         break;
 
       case 33:
+        arm.arm_mv_delta(1, 15, 85);
         break;
       
       case 34:
+        arm.arm_mv_delta(1, -15, 85);
         break;
       
       case 35:
+        arm.arm_mv_delta(2, 15, 85);
         break;
       
       case 36:
+        arm.arm_mv_delta(2, -15, 85);
         break;
 
       case 37:

@@ -14,18 +14,20 @@ enum class ARM_POS:char {
 
 class Arm {
 private:
-  ExtServo base;
-  ExtServo upper;
-
-  void arm_update_pos();
+  // ExtServo base;
+  // ExtServo upper;
 
 public:
   Arm();
   ~Arm();
 
+  ExtServo base;
+  ExtServo upper;
+
   void arm_connect();
   void arm_zero();
-  void arm_iso_ctrl(int servo_num, int deg, int ms_delay = 0);
+  void arm_mv_target(int servo_num, int target_deg, int ms_delay = 0);
+  void arm_mv_delta(int servo_num, int delta_deg, int ms_delay = 0);
   void arm_set_pos(ARM_POS pos);
 };
 

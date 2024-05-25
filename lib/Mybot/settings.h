@@ -79,12 +79,12 @@
 #define SERVO_upper_pin  24
 
 /* ARM inits */
-#define SERVO_base_init 40
-#define SERVO_upper_init 0
+#define SERVO_base_init 90
+#define SERVO_upper_init 90
 
 /* ARM LIMITs*/
-#define SERVO_base_max 180
-#define SERVO_base_min 0
+#define SERVO_base_max 162
+#define SERVO_base_min 2
 #define SERVO_upper_max  180
 #define SERVO_upper_min  0
 
