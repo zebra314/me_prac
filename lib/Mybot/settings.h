@@ -75,20 +75,16 @@
 #define BR_vel_kd    0.8
 
 /* ARM */
-#define SERVO_base_r_pin 22
-#define SERVO_base_l_pin 24
-#define SERVO_upper_pin  26
+#define SERVO_base_pin 22
+#define SERVO_upper_pin  24
 
 /* ARM inits */
-#define SERVO_base_r_init 0
-#define SERVO_base_l_init 0
-#define SERVO_upper_init  0
+#define SERVO_base_init 40
+#define SERVO_upper_init 0
 
 /* ARM LIMITs*/
-#define SERVO_base_r_max 180
-#define SERVO_base_r_min 0
-#define SERVO_base_l_max 180
-#define SERVO_base_l_min 0
+#define SERVO_base_max 180
+#define SERVO_base_min 0
 #define SERVO_upper_max  180
 #define SERVO_upper_min  0
 
