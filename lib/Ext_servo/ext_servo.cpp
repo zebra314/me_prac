@@ -13,9 +13,9 @@ template <int attach_pin>
 static void ext_servo_handler(void* pvParameters) {
   while (true) {
     if (ext_servo_list[attach_pin]->current_deg == ext_servo_list[attach_pin]->target_deg) {
-      vTaskSuspend(NULL);
+      // vTaskSuspend(NULL); // This will casusing the servo to shake when the task is suspended
       continue; 
-    }else if (ext_servo_list[attach_pin]->current_deg < ext_servo_list[attach_pin]->target_deg) {
+    } else if (ext_servo_list[attach_pin]->current_deg < ext_servo_list[attach_pin]->target_deg) {
       ext_servo_list[attach_pin]->current_deg++;
     } else if (ext_servo_list[attach_pin]->current_deg > ext_servo_list[attach_pin]->target_deg) {
       ext_servo_list[attach_pin]->current_deg--;
@@ -49,14 +49,6 @@ void ExtServo::ext_servo_allot(int attach_pin) {
   
   case 24:
     xTaskCreate(&ext_servo_handler<24>, "ext_servo_handler", 500, NULL, 1, &taskHandle);
-    break;
-  
-  case 26:
-    xTaskCreate(&ext_servo_handler<26>, "ext_servo_handler", 500, NULL, 1, &taskHandle);
-    break;
-  
-  case 28:
-    xTaskCreate(&ext_servo_handler<28>, "ext_servo_handler", 500, NULL, 1, &taskHandle);
     break;
   
   default:
