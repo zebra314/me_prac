@@ -14,8 +14,7 @@ enum class ARM_POS:char {
 
 class Arm {
 private:
-  ExtServo base_r;
-  ExtServo base_l;
+  ExtServo base;
   ExtServo upper;
 
   void arm_update_pos();
