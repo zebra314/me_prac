@@ -1,25 +1,29 @@
 #include <Arduino_FreeRTOS.h>
-
 #include <arm.h>
 #include <plate.h>
 #include <blueTooth.cpp>
 
+// Mybot components
 Plate plate;
 Arm arm;
 
-// BT param
+// BT data
 int rcv = 0x04;
 int vel = 0;
 
+// Game Logic
 bool executed = false;
-void mybot_task(void* pvParameters);
+
+// Motor timeout control
+double last_time = millis();
+
+static void mybot_task(void* pvParameters);
 
 void mybot_connect()  {
   Serial.begin(9600);
   BlueTooth_setup();
   plate.plate_connect();
   arm.arm_connect();
-  arm.arm_zero();
 }
 
 void mybot_on() {
@@ -28,32 +32,25 @@ void mybot_on() {
     "mybot_task",
     500,
     NULL,
-    0,
+    1,
     NULL
   );
 }
 
-void mybot_task(void* pvParameters) {
-  double last_time = millis();
-
+static void mybot_task(void* pvParameters) {
   while(1) {
     // Game logic
     if (!executed) {
       // plate.plate_before_take_ball();
       // arm.arm_set_pos(ARM_POS::TAKE_BALL);
       // arm.arm_set_pos(ARM_POS::PRE_TAKE_BALL);
-      // executed = true;
-    }
-
-    if(millis() - last_time > 150 ){
-      plate.plate_command(Command::PAUSE, 0);
+      executed = true;
     }
 
     // Read the bluetooth signal and translate it to command
-    if(BlueTooth_read(&rcv, &vel)){
-      // Serial.print(rcv); Serial.print(" "); Serial.println(vel);
-      switch (rcv)
-      {
+    if(BlueTooth_read(&rcv, &vel)) {
+      Serial.print(rcv); Serial.print(" "); Serial.println(vel);
+      switch (rcv) {
       case 16:
         plate.plate_command(Command::LINEAR_PWM, 200);
         last_time = millis();
