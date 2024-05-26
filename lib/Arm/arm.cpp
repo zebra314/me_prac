@@ -55,35 +55,35 @@ void Arm::arm_mv_delta(int servo_num, int delta_deg, int ms_delay) {
 void Arm::arm_set_pos(ARM_POS pos) {
   switch (pos) {
   case ARM_POS::ZERO:
-    this->base.target_deg = 0;
-    this->upper.target_deg = 0;
+    this->base.target_deg = 90;
+    this->upper.target_deg = 90;
 
-    this->base.ms_delay = 70;
-    this->upper.ms_delay = 70;
+    this->base.ms_delay = 15;
+    this->upper.ms_delay = 15;
     break;
   
   case ARM_POS::PRE_TAKE_BALL:
-    this->base.target_deg = 0;
-    this->upper.target_deg = 0;
+    this->base.target_deg = 30;
+    this->upper.target_deg = 30;
 
-    this->base.ms_delay = 70;
-    this->upper.ms_delay = 70;
+    this->base.ms_delay = 15;
+    this->upper.ms_delay = 15;
     break;
 
   case ARM_POS::TAKE_BALL:
-    this->base.target_deg = 0;
-    this->upper.target_deg = 0;
+    this->base.target_deg = 14;
+    this->upper.target_deg = 18;
 
-    this->base.ms_delay = 70;
-    this->upper.ms_delay = 70;
+    this->base.ms_delay = 15;
+    this->upper.ms_delay = 15;
     break;
 
   case ARM_POS::DROP_BALL:
-    this->base.target_deg = 0;
-    this->upper.target_deg = 0;
+    this->base.target_deg = 47;
+    this->upper.target_deg = 180;
 
-    this->base.ms_delay = 70;
-    this->upper.ms_delay = 70;
+    this->base.ms_delay = 15;
+    this->upper.ms_delay = 15;
     break;
     
   default:

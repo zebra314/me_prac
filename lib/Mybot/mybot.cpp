@@ -15,6 +15,7 @@ int vel = 0;
 bool executed = false;
 
 // Motor timeout control
+bool motor_timeout_executed = false;
 double last_time = millis();
 
 static void mybot_task(void* pvParameters);
@@ -47,61 +48,75 @@ static void mybot_task(void* pvParameters) {
       executed = true;
     }
 
+    if(millis() - last_time > 150 && !motor_timeout_executed) {
+      plate.plate_command(Command::PAUSE, 0);
+      motor_timeout_executed = true;
+    }
+
     // Read the bluetooth signal and translate it to command
     if(BlueTooth_read(&rcv, &vel)) {
-      Serial.print(rcv); Serial.print(" "); Serial.println(vel);
+      // Serial.print(rcv); Serial.print(" "); Serial.println(vel);
       switch (rcv) {
       case 16:
         plate.plate_command(Command::LINEAR_PWM, 200);
         last_time = millis();
+        motor_timeout_executed = false;
         break;
 
       case 17:
         plate.plate_command(Command::LINEAR_PWM, -200);
         last_time = millis();
+        motor_timeout_executed = false;
         break;
 
       case 18:
         plate.plate_command(Command::ANGULAR_PWM, 200);
         last_time = millis();
+        motor_timeout_executed = false;
         break;
 
       case 19:
         plate.plate_command(Command::ANGULAR_PWM, -200);
         last_time = millis();
+        motor_timeout_executed = false;
         break;
 
       case 20:
         plate.plate_command(Command::PAUSE, 0);
         last_time = millis();
+        motor_timeout_executed = false;
         break;
 
       case 33:
-        arm.arm_mv_delta(1, 15, 85);
+        arm.arm_mv_delta(1, 5, 40);
         break;
       
       case 34:
-        arm.arm_mv_delta(1, -15, 85);
+        arm.arm_mv_delta(1, -5, 40);
         break;
       
       case 35:
-        arm.arm_mv_delta(2, 15, 85);
+        arm.arm_mv_delta(2, 5, 20);
         break;
       
       case 36:
-        arm.arm_mv_delta(2, -15, 85);
+        arm.arm_mv_delta(2, -5, 20);
         break;
 
       case 37:
+        arm.arm_set_pos(ARM_POS::ZERO);
         break;
       
       case 38:
+        arm.arm_set_pos(ARM_POS::PRE_TAKE_BALL);
         break;
       
       case 39:
+        arm.arm_set_pos(ARM_POS::TAKE_BALL);
         break;
       
       case 40:
+        arm.arm_set_pos(ARM_POS::DROP_BALL);
         break;
       
       default:

@@ -12,12 +12,14 @@ ExtServo* ext_servo_list[53] = {nullptr}; // 53 is the biggest number of externa
 template <int attach_pin>
 static void ext_servo_handler(void* pvParameters) {
   while (true) {
+    vTaskDelay(1);
+
     // Check the if archieved the target deg
     if (ext_servo_list[attach_pin]->current_deg == ext_servo_list[attach_pin]->target_deg) {
       // vTaskSuspend(NULL); // This will casusing the servo to shake when the task is suspended
       continue; 
     }
-
+    
     // Check the target deg limit
     if (ext_servo_list[attach_pin]->target_deg > ext_servo_list[attach_pin]->upper_limit) {
       ext_servo_list[attach_pin]->target_deg = ext_servo_list[attach_pin]->upper_limit;
