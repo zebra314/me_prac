@@ -58,32 +58,32 @@ void Arm::arm_set_pos(ARM_POS pos) {
     this->base.target_deg = 90;
     this->upper.target_deg = 90;
 
-    this->base.ms_delay = 15;
-    this->upper.ms_delay = 15;
+    this->base.ms_delay = 17;
+    this->upper.ms_delay = 17;
     break;
   
   case ARM_POS::PRE_TAKE_BALL:
     this->base.target_deg = 30;
     this->upper.target_deg = 30;
 
-    this->base.ms_delay = 15;
-    this->upper.ms_delay = 15;
+    this->base.ms_delay = 17;
+    this->upper.ms_delay = 17;
     break;
 
   case ARM_POS::TAKE_BALL:
     this->base.target_deg = 14;
     this->upper.target_deg = 18;
 
-    this->base.ms_delay = 15;
-    this->upper.ms_delay = 15;
+    this->base.ms_delay = 17;
+    this->upper.ms_delay = 17;
     break;
 
   case ARM_POS::DROP_BALL:
-    this->base.target_deg = 47;
-    this->upper.target_deg = 180;
+    this->base.target_deg = 35;
+    this->upper.target_deg = 160;
 
-    this->base.ms_delay = 15;
-    this->upper.ms_delay = 15;
+    this->base.ms_delay = 17;
+    this->upper.ms_delay = 17;
     break;
     
   default:

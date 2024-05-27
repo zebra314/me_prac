@@ -3,13 +3,18 @@
 #include <plate.h>
 #include <blueTooth.cpp>
 
+// Conrtol mode 
+#define HIGH_VEL 200
+#define LOW_VEL 100
+
 // Mybot components
 Plate plate;
 Arm arm;
 
 // BT data
-int rcv = 0x04;
-int vel = 0;
+int rcv_1 = 0x04;
+int rcv_2 = 0x00;
+int vel = HIGH_VEL;
 
 // Game Logic
 bool executed = false;
@@ -54,29 +59,29 @@ static void mybot_task(void* pvParameters) {
     }
 
     // Read the bluetooth signal and translate it to command
-    if(BlueTooth_read(&rcv, &vel)) {
-      // Serial.print(rcv); Serial.print(" "); Serial.println(vel);
-      switch (rcv) {
+    if(BlueTooth_read(&rcv_1, &rcv_2)) {
+      // Serial.print(rcv_1); Serial.print(" "); Serial.println(rcv_2);
+      switch (rcv_1) {
       case 16:
-        plate.plate_command(Command::LINEAR_PWM, 200);
+        plate.plate_command(Command::LINEAR_PWM, vel);
         last_time = millis();
         motor_timeout_executed = false;
         break;
 
       case 17:
-        plate.plate_command(Command::LINEAR_PWM, -200);
+        plate.plate_command(Command::LINEAR_PWM, -vel);
         last_time = millis();
         motor_timeout_executed = false;
         break;
 
       case 18:
-        plate.plate_command(Command::ANGULAR_PWM, 200);
+        plate.plate_command(Command::ANGULAR_PWM, vel*1.5);
         last_time = millis();
         motor_timeout_executed = false;
         break;
 
       case 19:
-        plate.plate_command(Command::ANGULAR_PWM, -200);
+        plate.plate_command(Command::ANGULAR_PWM, -vel*1.5);
         last_time = millis();
         motor_timeout_executed = false;
         break;
@@ -88,19 +93,19 @@ static void mybot_task(void* pvParameters) {
         break;
 
       case 33:
-        arm.arm_mv_delta(1, 5, 40);
+        arm.arm_mv_delta(1, 5, 17);
         break;
       
       case 34:
-        arm.arm_mv_delta(1, -5, 40);
+        arm.arm_mv_delta(1, -5, 17);
         break;
       
       case 35:
-        arm.arm_mv_delta(2, 5, 20);
+        arm.arm_mv_delta(2, 5, 17);
         break;
       
       case 36:
-        arm.arm_mv_delta(2, -5, 20);
+        arm.arm_mv_delta(2, -5, 17);
         break;
 
       case 37:
@@ -119,6 +124,16 @@ static void mybot_task(void* pvParameters) {
         arm.arm_set_pos(ARM_POS::DROP_BALL);
         break;
       
+      // Increase the speed
+      case 42:
+        vel = HIGH_VEL;
+        break;
+
+      // Decrease the speed 
+      case 43:
+        vel = LOW_VEL;
+        break;
+
       default:
         break;
       }

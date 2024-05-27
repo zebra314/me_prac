@@ -18,10 +18,10 @@ void BlueTooth_setup() {
   BT.begin(BlueTooth_BaudRate);
 }
 
-bool BlueTooth_read(int* rcv, int* vel){
+bool BlueTooth_read(int* rcv_1, int* rcv_2){
   if (BT.available()) {
-    *rcv = BT.read();
-    *vel = BT.read();
+    *rcv_1 = BT.read();
+    *rcv_2 = BT.read();
     return true;
   }else{
     return false;
