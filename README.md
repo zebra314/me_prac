@@ -61,14 +61,26 @@ To build the docker image
 make install
 ```
 
-To compile the code
+To build the code and upload to the arduino
+
+```sh
+make
+```
+
+To compile the code only
 
 ```sh
 make build
 ```
 
-To upload the code to the arduino
+To upload the code to the arduino only
 
 ```sh
 make upload
+```
+
+To attach the docker container
+
+```sh
+make attach
 ```
