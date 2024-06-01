@@ -8,7 +8,7 @@ ExtServo::~ExtServo() {
   // Destructor
 }
 
-ExtServo* ext_servo_list[53] = {nullptr}; // 53 is the biggest number of external servos
+ExtServo* ext_servo_list[53] = {nullptr}; // 53 is the biggest pin number of external servos
 template <int attach_pin>
 static void ext_servo_handler(void* pvParameters) {
   while (true) {
@@ -27,7 +27,7 @@ static void ext_servo_handler(void* pvParameters) {
       ext_servo_list[attach_pin]->target_deg = ext_servo_list[attach_pin]->lower_limit;
     }
 
-    // Deacceleration
+    // Accelerate at the beginning and slow down when approaching the target
     if (abs(ext_servo_list[attach_pin]->current_deg - ext_servo_list[attach_pin]->target_deg) < 4) {
       ext_servo_list[attach_pin]->mv_unit = 1;
     }
@@ -44,7 +44,7 @@ static void ext_servo_handler(void* pvParameters) {
     vTaskDelay(ext_servo_list[attach_pin]->ms_delay / portTICK_PERIOD_MS);
 
     // Debug msg
-    ext_servo_list[attach_pin]->ext_servo_show_pos();
+    // ext_servo_list[attach_pin]->ext_servo_show_pos();
   }
   vTaskDelete(NULL);
 }

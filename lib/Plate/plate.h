@@ -68,7 +68,6 @@ public:
 
   /* GAME */
   void plate_before_take_ball();
-  // void plate_manual();
 
   /* BASIC */
   void plate_connect();

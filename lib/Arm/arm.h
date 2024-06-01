@@ -15,15 +15,12 @@ enum class ARM_POS:char {
 
 class Arm {
 private:
-  // ExtServo base;
-  // ExtServo upper;
+  ExtServo base;
+  ExtServo upper;
 
 public:
   Arm();
   ~Arm();
-
-  ExtServo base;
-  ExtServo upper;
 
   void arm_connect();
   void arm_zero();

@@ -13,21 +13,24 @@ void Arm::arm_connect() {
   upper.ext_servo_connect(SERVO_upper_pin, SERVO_upper_init, SERVO_upper_min, SERVO_upper_max);
 }
 
+// The servo will zero in the ext_servo_connect() function
+// So, this function will not be used in the initial setup
 void Arm::arm_zero() {
   base.ext_servo_zero();
   upper.ext_servo_zero();
 }
 
-void Arm::arm_mv_target(int servo_num, int deg, int ms_delay = 0, int mv_unit = 1) {
+// Control the arm to move to the target degree
+void Arm::arm_mv_target(int servo_num, int target_deg, int ms_delay = 0, int mv_unit = 1) {
   switch (servo_num) {
   case 1:
-    base.target_deg = deg;
+    base.target_deg = target_deg;
     base.ms_delay = ms_delay;
     base.mv_unit = mv_unit;
     break;
   
   case 2:
-    upper.target_deg = deg;
+    upper.target_deg = target_deg;
     upper.ms_delay = ms_delay;
     upper.mv_unit = mv_unit;
     break;
@@ -37,6 +40,7 @@ void Arm::arm_mv_target(int servo_num, int deg, int ms_delay = 0, int mv_unit = 
   }
 }
 
+// Control the arm to move by the delta degree
 void Arm::arm_mv_delta(int servo_num, int delta_deg, int ms_delay = 0, int mv_unit = 1) {
   switch (servo_num) {
   case 1:

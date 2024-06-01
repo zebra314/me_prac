@@ -52,8 +52,6 @@ static void mybot_task(void* pvParameters) {
     // Game logic
     if (!executed) {
       // plate.plate_before_take_ball();
-      // arm.arm_set_pos(ARM_POS::TAKE_BALL);
-      // arm.arm_set_pos(ARM_POS::PRE_TAKE_BALL);
       executed = true;
     }
 

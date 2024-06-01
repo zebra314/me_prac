@@ -261,18 +261,6 @@ bool Plate::plate_command(Command command, double value_1 = 0, double value_2 = 
   return true;
 }
 
-// bool Plate::plate_before_take_ball(){
-
-// }
-
-// bool Plate::plate_take_ball(){
-
-// }
-
-// bool Plate::plate_release_ball(){
-
-// }
-
 void Plate::plate_print_info() {
   if (!Serial.available()) {
     return;
