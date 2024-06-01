@@ -10,6 +10,7 @@ enum class ARM_POS:char {
   PRE_TAKE_BALL,
   TAKE_BALL,
   DROP_BALL,
+  FREEZE,
 };
 
 class Arm {
@@ -26,8 +27,8 @@ public:
 
   void arm_connect();
   void arm_zero();
-  void arm_mv_target(int servo_num, int target_deg, int ms_delay = 0);
-  void arm_mv_delta(int servo_num, int delta_deg, int ms_delay = 0);
+  void arm_mv_target(int servo_num, int target_deg, int ms_delay = 0, int mv_unit = 1);
+  void arm_mv_delta(int servo_num, int delta_deg, int ms_delay = 0, int mv_unit = 1);
   void arm_set_pos(ARM_POS pos);
 };
 

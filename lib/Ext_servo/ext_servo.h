@@ -19,13 +19,17 @@ public:
   ExtServo();
   ~ExtServo();
 
+  // Used in the static servo handler
   Servo servo;
 
   int upper_limit;
   int lower_limit;
   int target_deg;
   int current_deg;
+
+  // Servo control variables
   int ms_delay;
+  int mv_unit;
 
   void ext_servo_connect(int attach_pin, int init_deg, int lower_limit, int upper_limit);
   void ext_servo_zero();

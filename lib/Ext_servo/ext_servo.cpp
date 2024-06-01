@@ -27,11 +27,16 @@ static void ext_servo_handler(void* pvParameters) {
       ext_servo_list[attach_pin]->target_deg = ext_servo_list[attach_pin]->lower_limit;
     }
 
+    // Deacceleration
+    if (abs(ext_servo_list[attach_pin]->current_deg - ext_servo_list[attach_pin]->target_deg) < 4) {
+      ext_servo_list[attach_pin]->mv_unit = 1;
+    }
+
     // Determine the direction of the servo
     if (ext_servo_list[attach_pin]->current_deg < ext_servo_list[attach_pin]->target_deg) {
-      ext_servo_list[attach_pin]->current_deg++;
+      ext_servo_list[attach_pin]->current_deg += ext_servo_list[attach_pin]->mv_unit;
     } else if (ext_servo_list[attach_pin]->current_deg > ext_servo_list[attach_pin]->target_deg) {
-      ext_servo_list[attach_pin]->current_deg--;
+      ext_servo_list[attach_pin]->current_deg -= ext_servo_list[attach_pin]->mv_unit;
     }
 
     // Actuate the servo
@@ -51,6 +56,7 @@ void ExtServo::ext_servo_connect(int attach_pin, int init_deg, int lower_limit, 
   this->lower_limit = lower_limit;
   this->upper_limit = upper_limit;
   this->ms_delay = 0;
+  this->mv_unit = 1;
   
   ext_servo_zero();
   ext_servo_allot(attach_pin);

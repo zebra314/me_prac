@@ -88,4 +88,6 @@
 #define SERVO_upper_max  180
 #define SERVO_upper_min  0
 
+#define SERVO_base_ms_delay 17
+
 #endif // !SETTINGS_H

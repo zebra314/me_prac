@@ -21,7 +21,11 @@ bool executed = false;
 
 // Motor timeout control
 bool motor_timeout_executed = false;
-double last_time = millis();
+double motor_last_time = millis();
+
+// Arm timeout control
+bool arm_timeout_executed = false;
+double arm_last_time = millis();
 
 static void mybot_task(void* pvParameters);
 
@@ -53,9 +57,17 @@ static void mybot_task(void* pvParameters) {
       executed = true;
     }
 
-    if(millis() - last_time > 150 && !motor_timeout_executed) {
+    // Motor timeout control  
+    if(millis() - motor_last_time > 75 && !motor_timeout_executed) {
       plate.plate_command(Command::PAUSE, 0);
       motor_timeout_executed = true;
+    }
+
+    // Arm timeout control
+    if(millis() - arm_last_time > 75 && !arm_timeout_executed) {
+      Serial.println(millis() - arm_last_time);
+      arm.arm_set_pos(ARM_POS::FREEZE);
+      arm_timeout_executed = true;
     }
 
     // Read the bluetooth signal and translate it to command
@@ -64,48 +76,56 @@ static void mybot_task(void* pvParameters) {
       switch (rcv_1) {
       case 16:
         plate.plate_command(Command::LINEAR_PWM, vel);
-        last_time = millis();
+        motor_last_time = millis();
         motor_timeout_executed = false;
         break;
 
       case 17:
         plate.plate_command(Command::LINEAR_PWM, -vel);
-        last_time = millis();
+        motor_last_time = millis();
         motor_timeout_executed = false;
         break;
 
       case 18:
-        plate.plate_command(Command::ANGULAR_PWM, vel*1.5);
-        last_time = millis();
+        plate.plate_command(Command::ANGULAR_PWM, vel*1.3);
+        motor_last_time = millis();
         motor_timeout_executed = false;
         break;
 
       case 19:
-        plate.plate_command(Command::ANGULAR_PWM, -vel*1.5);
-        last_time = millis();
+        plate.plate_command(Command::ANGULAR_PWM, -vel*1.3);
+        motor_last_time = millis();
         motor_timeout_executed = false;
         break;
 
       case 20:
         plate.plate_command(Command::PAUSE, 0);
-        last_time = millis();
+        motor_last_time = millis();
         motor_timeout_executed = false;
         break;
 
       case 33:
-        arm.arm_mv_delta(1, 5, 17);
+        arm.arm_mv_delta(1, 5, 17, 2);
+        arm_last_time = millis();
+        arm_timeout_executed = false;
         break;
       
       case 34:
-        arm.arm_mv_delta(1, -5, 17);
+        arm.arm_mv_delta(1, -5, 17, 2);
+        arm_last_time = millis();
+        arm_timeout_executed = false;
         break;
       
       case 35:
-        arm.arm_mv_delta(2, 5, 17);
+        arm.arm_mv_delta(2, 5, 17, 2);
+        arm_last_time = millis();
+        arm_timeout_executed = false;
         break;
       
       case 36:
-        arm.arm_mv_delta(2, -5, 17);
+        arm.arm_mv_delta(2, -5, 17, 2);
+        arm_last_time = millis();
+        arm_timeout_executed = false;
         break;
 
       case 37:
