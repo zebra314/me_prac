@@ -60,7 +60,7 @@ void Arm::arm_set_pos(ARM_POS pos) {
   switch (pos) {
   case ARM_POS::ZERO:
     this->base.target_deg = 90;
-    this->upper.target_deg = 90;
+    this->upper.target_deg = 50;
 
     this->base.ms_delay = 17;
     this->upper.ms_delay = 17;
@@ -81,7 +81,7 @@ void Arm::arm_set_pos(ARM_POS pos) {
     break;
 
   case ARM_POS::TAKE_BALL:
-    this->base.target_deg = 12;
+    this->base.target_deg = 9;
     this->upper.target_deg = 18;
 
     this->base.ms_delay = 17;
@@ -99,7 +99,7 @@ void Arm::arm_set_pos(ARM_POS pos) {
     this->upper.ms_delay = 17;
 
     this->base.mv_unit = 3;
-    this->upper.mv_unit = 3;
+    this->upper.mv_unit = 2;
     break;
   
   case ARM_POS::FREEZE:
