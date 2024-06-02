@@ -1,13 +1,13 @@
 # MYBOT
 
-An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-like robot that consists of a four wheel drive system and a 5 DOF robotic arm. The robot is controlled by smartphone via bluetooth.
+An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-like robot that consists of a four wheel drive system and a 2 DOF robotic arm. The robot is running on FreeRTOS and controlled by smartphone via bluetooth.
 
 ## Hardware
 
 - Arduino Mega 2560
 - HC-05 Bluetooth Module
 - 4x CHR-GM37 Motor with Encoder
-- 5x Servo Motor
+- 2x RDS3235 35kg Servo
 - 2x L298N Motor Driver
 - 6x 18650 Battery
 - 2x 18650 Battery Holder
@@ -17,7 +17,36 @@ An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-
 
 ## Schematic
 
+My teammate LuLu is responsible for the schematic design. The schematic is shown below.
+![Schematic](./data/schematic.JPG)
+
 ## Control Method
+
+### Setup
+
+```mermaid
+flowchart TD;
+    A[Initial Serial port] --> B[Connect bluetooth];
+    B --> C;
+    C --> D;
+    D --> E[Create freeRTOS task for bluetooth];
+
+subgraph C[Connect plate]
+    F[Connect FR wheel ]--> G[Connect FL wheel];
+    G--> H[Connect BR wheel];
+    H--> I[Connect BL wheel];
+end
+
+subgraph D[Connect arm]
+    J[Connect base servo]--> K[Create freeRTOS task for base servo];
+    K--> L[Connect upper servo];
+    L--> M[Create freeRTOS task for upper servo];
+end
+```
+
+### Main Control Loop
+
+### COMP_PID
 
 ```mermaid
 graph TD;
@@ -37,7 +66,6 @@ graph TD;
     L --> N;
     N --> O[Compute combined output];
     O --> P[Update previous time and error values];
-    P --> A;
 ```
 
 $$
