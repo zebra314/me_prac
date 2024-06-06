@@ -212,4 +212,4 @@ Before the final competition.
 
 We.
 
-![we](./data/group.JPG)
+![we](./data/group.jpg)
