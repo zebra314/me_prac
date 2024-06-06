@@ -4,8 +4,8 @@ An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-
 
 ## Hardware
 
-- Arduino Mega 2560
-- HC-05 Bluetooth Module
+- 1x Arduino Mega 2560
+- 1x HC-05 Bluetooth Module
 - 4x CHR-GM37 Motor with Encoder
 - 2x RDS3235 35kg Servo
 - 2x L298N Motor Driver
