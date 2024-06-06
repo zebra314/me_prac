@@ -103,6 +103,11 @@ B --> ifReach;
 
 ### COMP_PID
 
+To control the wheel, we use a COMP_PID controller. The COMP_PID controller is a PID controller that can adjust the weight of the position and velocity error. The controller is shown below.
+
+The plate is able to move by a designated velocity and position.
+I write a script the make the plate to move to a target point in the map. However, it is not used in the final version, because we found out that our pilot is just as good as the script.  
+
 ```mermaid
 graph TD;
     A[Input: target velocity and position] --> B[Compute current time];
@@ -131,6 +136,9 @@ $$
 \text{pos weight} &= 1 - \text{vel weight}
 \end{align*}
 $$
+
+Some experiment data is shown below.
+![Experiment Data](./data/pid_comp.png)
 
 ## Usage
 
