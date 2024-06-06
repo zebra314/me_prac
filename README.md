@@ -53,12 +53,12 @@ make attach
 
 [Mesh of the robot](./meshes/mybot.stl)
 
-```html
-<script src="https://github.com/zebra314/me_prac/meshes/mybot.stl"></script>
-```
-
 Assembly drawing of the robot
+
 ![Assembly](./data/assembly.PNG)
+
+The robot and the competition field
+![Robot](./data/my_bot.gif)
 
 ## Schematic
 
