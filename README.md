@@ -17,7 +17,8 @@ An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-
 
 ## Schematic
 
-My teammate LuLu is responsible for the schematic design. The schematic is shown below.
+My teammate LuLu 
+is responsible for the schematic design. The schematic is shown below.
 ![Schematic](./data/schematic.JPG)
 
 ## Control Method
@@ -29,7 +30,7 @@ flowchart TD;
     A[Initial Serial port] --> B[Connect bluetooth];
     B --> C;
     C --> D;
-    D --> E[Create freeRTOS task for bluetooth];
+    D --> E[Connect bluetooth];
 
 subgraph C[Connect plate]
     F[Connect FR wheel ]--> G[Connect FL wheel];
@@ -45,6 +46,60 @@ end
 ```
 
 ### Main Control Loop
+
+```mermaid
+flowchart TD;
+    B[Check timeout];
+    C[Read bluetooth command];
+
+    B --> C;
+    C --> B;
+
+subgraph B[Check timeout]
+    E[Get time value and flag from plate] --> ifPlate[If the plate idle reach timeout?];
+    ifPlate-->|Yes| F[Stop the plate];
+    ifPlate -->|No| G[Do nothing];
+
+    H[Get time value and flag from arm] --> ifArm[If the arm idle reach timeout?];
+    ifArm -->|Yes| I[Freeze the arm];
+    ifArm -->|No| J[Do nothing];
+end
+
+subgraph C[Process command]
+    K[Read bluetooth command];
+    K --> L[Parse command];
+    L --> M[Execute command];
+    M --> N[Reset timeout];
+end
+```
+
+### Arm Control
+
+```mermaid
+flowchart TD;
+
+ifReach[Check if reach the target];
+ifLimit[Check if reach the limit];
+ifAcce[Check if the target is close to the current position];
+A[Determine the direction];
+B[Actuate the servo];
+C[Set the taget equals to the limit];
+D[Deaccelerate the servo];
+
+ifReach --> |Yes| ifReach;
+ifReach --> |No| ifLimit;
+
+ifLimit --> |Yes| C;
+C --> ifAcce;
+ifLimit --> |No| ifAcce;
+
+ifAcce --> |Yes| D;
+D --> A;
+ifAcce --> |No| A;
+
+A --> B;
+B --> ifReach;
+```
 
 ### COMP_PID
 
