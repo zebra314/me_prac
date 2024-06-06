@@ -212,6 +212,6 @@ Before the final competition.
 
 ![me](./data/me.JPG)
 
-We.
+Us.
 
 ![we](./data/group.jpg)
