@@ -2,6 +2,8 @@
 
 An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-like robot that consists of a four wheel drive system and a 2 DOF robotic arm. The robot is running on FreeRTOS and controlled by smartphone via bluetooth.
 
+![run](./data/run.gif)
+
 ## Hardware
 
 - 1x Arduino Mega 2560
@@ -13,15 +15,21 @@ An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-
 - 2x 18650 Battery Holder
 - 2x Laser cutting aluminum plate
 
-## Software
-
 ## Schematic
 
-My teammate LuLu 
+My teammate <a href="https://github.com/lulumy1015" target="_blank">@lulumy1015</a>
 is responsible for the schematic design. The schematic is shown below.
 ![Schematic](./data/schematic.JPG)
 
 ## Control Method
+
+### Bluetooth communicate
+
+My teammate <a href="https://github.com/dragonwu0919" target="_blank">@dragonwu0919</a> is responsible for the bluetooth communication and the remote controller UI design.
+
+The remote control program includes vehicle movement, arm control, and speed control. Steering involves clockwise/counterclockwise rotation for precise control. Arm functions include resetting, positioning, taking, and dropping ping pong balls. Speed settings help with alignment. Signals are periodically transmitted for movement and initiated by button press for arm control. This periodic transmission is managed by a timer, triggering Bluetooth transmission and countdown cycles.
+
+![](./data/remote_controller_gui.png)
 
 ### Setup
 
@@ -175,3 +183,33 @@ To attach the docker container
 ```sh
 make attach
 ```
+
+## Record Photos
+
+Some old version arms and mechanical parts.
+
+![arm_old](./data/arm_old.jpg)
+
+![arm_test_1](./data/arm_test_1.jpg)
+
+![arm_test_2](./data/arm_test_2.jpg)
+
+![motor_wheel](./data/motor_to_wheel.jpg)
+
+Making the robot.
+
+![making_1](./data/record_1.jpg)
+
+Before the final competition.
+
+![take](./data/test_take_ball.jpg)
+
+![fix](./data/fixing_the_mech.jpg)
+
+![before](./data/before_contest.JPG)
+
+![me](./data/me.JPG)
+
+We.
+
+![we](./data/group.JPG)
