@@ -4,6 +4,42 @@ An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-
 
 ![run](./data/run.gif)
 
+## Usage
+
+It is recommended to use the docker image to compile the code, you can also use the platformio extension in vscode.
+
+For docker user, you can use the following commands:
+
+To build the docker image
+
+```sh
+make install
+```
+
+To build the code and upload to the arduino
+
+```sh
+make
+```
+
+To compile the code only
+
+```sh
+make build
+```
+
+To upload the code to the arduino only
+
+```sh
+make upload
+```
+
+To attach the docker container
+
+```sh
+make attach
+```
+
 ## Hardware
 
 - 1x Arduino Mega 2560
@@ -15,7 +51,14 @@ An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-
 - 2x 18650 Battery Holder
 - 2x Laser cutting aluminum plate
 
-<script src="./data/mybot.stl"></script>
+[Mesh of the robot](./meshes/mybot.stl)
+
+```html
+<script src="https://github.com/zebra314/me_prac/meshes/mybot.stl"></script>
+```
+
+Assembly drawing of the robot
+![Assembly](./data/assembly.PNG)
 
 ## Schematic
 
@@ -31,7 +74,7 @@ My teammate <a href="https://github.com/dragonwu0919" target="_blank">@dragonwu0
 
 The remote control program includes vehicle movement, arm control, and speed control. Steering involves clockwise/counterclockwise rotation for precise control. Arm functions include resetting, positioning, taking, and dropping ping pong balls. Speed settings help with alignment. Signals are periodically transmitted for movement and initiated by button press for arm control. This periodic transmission is managed by a timer, triggering Bluetooth transmission and countdown cycles.
 
-![](./data/remote_controller_gui.png)
+![gui](./data/remote_controller_gui.png)
 
 ### Setup
 
@@ -149,42 +192,6 @@ $$
 
 Some experiment data is shown below.
 ![Experiment Data](./data/pid_comp.png)
-
-## Usage
-
-It is recommended to use the docker image to compile the code, you can also use the platformio extension in vscode.
-
-For docker user, you can use the following commands:
-
-To build the docker image
-
-```sh
-make install
-```
-
-To build the code and upload to the arduino
-
-```sh
-make
-```
-
-To compile the code only
-
-```sh
-make build
-```
-
-To upload the code to the arduino only
-
-```sh
-make upload
-```
-
-To attach the docker container
-
-```sh
-make attach
-```
 
 ## Record Photos
 
