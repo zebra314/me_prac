@@ -15,6 +15,8 @@ An arduino robot built for NYCU ME 2024 mechanical practice course. It is a car-
 - 2x 18650 Battery Holder
 - 2x Laser cutting aluminum plate
 
+<script src="./data/mybot.stl"></script>
+
 ## Schematic
 
 My teammate <a href="https://github.com/lulumy1015" target="_blank">@lulumy1015</a>
