@@ -54,6 +54,10 @@ make uninstall
 
 ## Hardware
 
+My teammate <a href="https://github.com/joshua0501" target="_blank">@joshua0501</a> is responsible for the mechanical design and the assembly of the robot.
+
+The robot consists of the following parts:
+
 - 1x Arduino Mega 2560
 - 1x HC-05 Bluetooth Module
 - 4x CHR-GM37 Motor with Encoder
@@ -70,6 +74,7 @@ Assembly drawing of the robot
 ![Assembly](./data/assembly.PNG)
 
 The robot and the competition field
+
 ![Robot](./data/my_bot.gif)
 
 ## Schematic
