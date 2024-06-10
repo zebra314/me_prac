@@ -1,8 +1,7 @@
 #include <mybot.cpp>
 
-void setup() {
-  mybot_connect();
-  mybot_on();
+void setup() { 
+  mybot_init();
 }
 
 void loop() {}

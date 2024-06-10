@@ -29,14 +29,12 @@ double arm_last_time = millis();
 
 static void mybot_task(void* pvParameters);
 
-void mybot_connect()  {
+void mybot_init()  {
   Serial.begin(9600);
   BlueTooth_setup();
   plate.plate_connect();
   arm.arm_connect();
-}
 
-void mybot_on() {
   xTaskCreate(
     mybot_task,
     "mybot_task",
