@@ -40,6 +40,18 @@ To attach the docker container
 make attach
 ```
 
+To remove the docker container and the build files
+
+```sh
+make clean
+```
+
+To remove the docker image
+
+```sh
+make uninstall
+```
+
 ## Hardware
 
 - 1x Arduino Mega 2560
@@ -75,6 +87,16 @@ My teammate <a href="https://github.com/dragonwu0919" target="_blank">@dragonwu0
 The remote control program includes vehicle movement, arm control, and speed control. Steering involves clockwise/counterclockwise rotation for precise control. Arm functions include resetting, positioning, taking, and dropping ping pong balls. Speed settings help with alignment. Signals are periodically transmitted for movement and initiated by button press for arm control. This periodic transmission is managed by a timer, triggering Bluetooth transmission and countdown cycles.
 
 ![gui](./data/remote_controller_gui.png)
+
+### FreeRTOS
+
+To control multiple motors and servos with different speeds, although we can use the `millis()` function to arrange the
+timing, it is not efficient for coding and it is hard to maintain when there are more and more motors and servos.
+Therefore, we need something manage to multitasking. FreeRTOS is a good choice for this situation.
+
+FreeRTOS is a real-time operating system kernel for embedded devices. Users create tasks, which are functions that run in an infinite loop. The kernel schedules the tasks based on their priority. The kernel also provides synchronization primitives, such as semaphores and mutex. In this project, we create three tasks in total for the bluetooth, the base sevo and the upper servo. Note that we didn't create a task for the wheels because it is includes in the bluetooth task.
+
+For more information about FreeRTOS, visit the [official website](https://www.freertos.org/).
 
 ### Setup
 
