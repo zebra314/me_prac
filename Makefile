@@ -36,6 +36,10 @@ plot:
 	./arduino-plotter-listener-linux64/listener
 		
 clean:
+	docker start platformio
+	docker exec platformio /bin/sh -c "pio run -t clean"
 	docker stop platformio
 	docker rm platformio
+
+uninstall:
 	docker rmi platformio:latest
